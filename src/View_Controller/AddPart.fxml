@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="355.0" prefWidth="602.0" style="-fx-background-color: #EAF0F6;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View_Controller.AddPart">
+   <children>
+      <Label layoutX="37.0" layoutY="39.0" text="Add Part">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <RadioButton fx:id="rdbOutsourced" layoutX="491.0" layoutY="31.0" mnemonicParsing="false" onAction="#SetMachineLbl" text="Outsourced">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+         <toggleGroup>
+            <ToggleGroup fx:id="rdoSource" />
+         </toggleGroup></RadioButton>
+      <RadioButton fx:id="rdbInHouse" layoutX="373.0" layoutY="31.0" mnemonicParsing="false" onAction="#SetMachineLbl" selected="true" text="In-House" toggleGroup="$rdoSource">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></RadioButton>
+      <TextField fx:id="txtPartID" disable="true" editable="false" layoutX="157.0" layoutY="90.0" promptText="Auto Gen - Disabled" />
+      <TextField fx:id="txtPartName" layoutX="157.0" layoutY="123.0" />
+      <TextField fx:id="txtPartInventory" layoutX="157.0" layoutY="155.0" />
+      <TextField fx:id="txtPartPrice" layoutX="157.0" layoutY="187.0" />
+      <TextField fx:id="txtPartMax" layoutX="157.0" layoutY="219.0" />
+      <TextField fx:id="txtPartMachineCompanyID" layoutX="157.0" layoutY="253.0" />
+      <TextField fx:id="txtPartMin" layoutX="378.0" layoutY="220.0" />
+      <Label layoutX="136.0" layoutY="94.0" text="ID" textAlignment="RIGHT" />
+      <Label layoutX="116.0" layoutY="127.0" text="Name" textAlignment="RIGHT" />
+      <Label layoutX="97.0" layoutY="159.0" text="Inventory" textAlignment="RIGHT" />
+      <Label layoutX="93.0" layoutY="191.0" text="Price/Cost" textAlignment="RIGHT" />
+      <Label layoutX="125.0" layoutY="223.0" text="Min" textAlignment="RIGHT" />
+      <Label fx:id="lblMachineText" alignment="CENTER_RIGHT" contentDisplay="RIGHT" layoutX="63.0" layoutY="257.0" nodeOrientation="RIGHT_TO_LEFT" text="Machine ID" textAlignment="RIGHT" />
+      <Label layoutX="348.0" layoutY="223.0" text="Max" textAlignment="RIGHT" />
+      <Button fx:id="btnAddPartSave" layoutX="408.0" layoutY="304.0" mnemonicParsing="false" onAction="#onActionSave" style="-fx-background-color: #d8e3ee; -fx-border-color: #b4cadf;" text="Save" />
+      <Button fx:id="btnAddPartCancel" layoutX="482.0" layoutY="304.0" mnemonicParsing="false" onAction="#partCancel" style="-fx-border-color: #b4cadf; -fx-background-color: #d8e3ee;" text="Cancel" />
+   </children>
+</AnchorPane>

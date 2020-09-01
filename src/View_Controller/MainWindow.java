@@ -14,17 +14,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
- *
  * @author Sam Gonzales
+ * Should add functionallity to select more than one part at a time to modify or delete.
+ * Should add the ability to have the search field update while the user is typing.
  */
 
-public class MainWindow  implements Initializable {
+public class MainWindow implements Initializable {
 
     Stage stage;
     Parent scene;
@@ -59,66 +61,102 @@ public class MainWindow  implements Initializable {
 
     /**
      * Opens up the Add Part Menu
-     * @param event Changes the Stage to Add Part Menu
-     * @throws IOException if unable to open Add Part
+     *
+     * @param event Changes the Stage to Add Part Menu if unable to open Add Part Menu an alert pops up alerting the
+     *              user that system was unable to open up the menu.
      */
     @FXML
-    public void OpenAddPartMenu(ActionEvent event) throws IOException {
-        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        Object scene = FXMLLoader.load(getClass().getResource("../View_Controller/AddPart.fxml"));
-        stage.setTitle("Add Part");
-        stage.setScene(new Scene((Parent) scene));
-        stage.show();
+    public void OpenAddPartMenu(ActionEvent event) {
+        try {
+            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            Object scene = FXMLLoader.load(getClass().getResource("../View_Controller/AddPart.fxml"));
+            stage.setTitle("Add Part");
+            stage.setScene(new Scene((Parent) scene));
+            stage.show();
+        } catch (RuntimeException | IOException runtimeException) {
+            Alert a = new Alert(Alert.AlertType.NONE);
+            a.setAlertType(Alert.AlertType.ERROR);
+            a.setContentText("Unable to open the Add a Part Menu!");
+            a.show();
+        }
     }
 
     /**
-     * Opens Add Product Menu
-     * @param event changes the stage to Add Product Menu
-     * @throws IOException if unable to open Add Product
+     * Opens up the Add Product Menu
+     *
+     * @param event Changes the Stage to Add Product Menu if unable to open Add Product Menu an alert pops up alerting
+     *              the user that system was unable to open up the menu.
      */
     @FXML
-    public void OpenAddProductMenu(ActionEvent event) throws IOException {
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("../View_Controller/AddProduct.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
+    public void OpenAddProductMenu(ActionEvent event) {
+        try {
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("../View_Controller/AddProduct.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
+        } catch (RuntimeException | IOException runtimeException) {
+            Alert a = new Alert(Alert.AlertType.NONE);
+            a.setAlertType(Alert.AlertType.ERROR);
+            a.setContentText("Unable to open the Add a Product Menu!");
+            a.show();
+        }
     }
 
     /**
-     * Opens Modify Part Menu
-     * @param event changes the stage to Modify Part Menu
-     * @throws IOException if unable to open Modify Part
+     * Opens Modify Part Menu and completes the form with the data selected
+     *
+     * @param event Changes the stage to Modify Part Menu if the user has a part selected, if the user does not have
+     *              a part selected an alert will alert the user to select the part before being able to proceed.
      */
     @FXML
-    public void onActionModifyPart(ActionEvent event) throws IOException {
-        //Selects Table View Row
-        Part part = tblViewPart.getSelectionModel().getSelectedItem();
-        if (part == null)
-            return;
+    public void onActionModifyPart(javafx.event.ActionEvent event) {
+        try {
+            //Selects Table View Row
+            Part part = tblViewPart.getSelectionModel().getSelectedItem();
+            if (part == null) {
+                Alert a = new Alert(Alert.AlertType.NONE);
+                a.setAlertType(Alert.AlertType.ERROR);
+                a.setContentText("You must select a part in order to modify!");
+                a.show();
+                return;
+            }
 
-        //Opens Modify Menu
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("../View_Controller/ModifyPart.fxml"));
-        loader.load();
-        ModifyPart PartController = loader.getController();
-        PartController.getPart(part);
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        Parent scene = loader.getRoot();
-        stage.setScene(new Scene(scene));
-        stage.show();
+            //Opens Modify Menu
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("../View_Controller/ModifyPart.fxml"));
+            Parent ParentModifyPart = loader.load();
+            Scene SceneModifyPart = new Scene(ParentModifyPart);
+            ModifyPart PartController = loader.getController();
+            PartController.getPart(part);
+            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            stage.setScene(SceneModifyPart);
+            stage.show();
+        } catch (RuntimeException | IOException runtimeException) {
+            Alert alert = new Alert(Alert.AlertType.NONE);
+            alert.setAlertType(Alert.AlertType.ERROR);
+            alert.setContentText("You must select a part in order to modify!");
+            alert.show();
+        }
     }
 
     /**
-     * Exits the program
+     * An alert pops up alerting the user with a confirmation message. If the user selects okay, the program will close
+     * if the user selects cancel, the alert message will close and user is returned to Main Window.
      */
     public void ExitMenu() {
-        System.exit(0);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setContentText("Are you sure you want to close program?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            System.exit(0);
+        }
     }
 
-
     /**
-     * Searches the Part Tableview
-      */
+     * Searches the Part Tableview for parts depending on the text in txtPartSearch field, the field can search
+     * Alphanumeric characters. Users are able to search for ID and/or Name or parts. If the field is left blank
+     * the Tableview shows all parts in the database.
+     */
     @FXML
     void onActionSearchPart() {
         filteredPartsData.setPredicate(part -> {
@@ -137,7 +175,9 @@ public class MainWindow  implements Initializable {
     }
 
     /**
-     * Searches the Product Tableview
+     * Searches the Product Tableview for parts depending on the text in txtProductSearch field, the field can search
+     * Alphanumeric characters. Users are able to search for ID and/or Name or parts. If the field is left blank
+     * the Tableview shows all Products in the database.
      */
     @FXML
     void onActionSearchProduct() {
@@ -157,34 +197,56 @@ public class MainWindow  implements Initializable {
     }
 
     /**
-     * Opens the Modify Product Menu
-      * @param event changes the stage to Modify Product Menu
-     * @throws IOException If unable to open up Modify Product Menu
+     * Opens Modify Product Menu and completes the form with the data selected
+     *
+     * @param event Changes the stage to Modify Product Menu if the user has a part selected, if the user does not have
+     *              a part selected an alert will alert the user to select the part before being able to proceed.
      */
     @FXML
-    void onActionModifyProduct(ActionEvent event) throws IOException {
-        FXMLLoader Loader = new FXMLLoader(getClass().getResource("../View_Controller/ModifyProduct.fxml"));
-        Loader.load();
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        Parent scene = Loader.getRoot();
-        stage.setScene(new Scene(scene));
-        stage.show();
-        Product product = tblViewProduct.getSelectionModel().getSelectedItem();
-        if (product == null)
-            return;
-        ModifyProduct modifyProductController = Loader.getController();
-        modifyProductController.selectedProduct(product.getId());
+    void onActionModifyProduct(ActionEvent event) {
+        try {
+            //Selects Table View Row
+            Product product = tblViewProduct.getSelectionModel().getSelectedItem();
+            if (product == null) {
+                Alert a = new Alert(Alert.AlertType.NONE);
+                a.setAlertType(Alert.AlertType.ERROR);
+                a.setContentText("You must select a part in order to modify!");
+                a.show();
+                return;
+            }
+            //Opens Modify Menu
+            FXMLLoader Loader = new FXMLLoader(getClass().getResource("../View_Controller/ModifyProduct.fxml"));
+            Loader.load();
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            Parent scene = Loader.getRoot();
+            stage.setScene(new Scene(scene));
+            stage.show();
+            ModifyProduct modifyProductController = Loader.getController();
+            modifyProductController.selectedProduct(product.getId());
+        } catch (RuntimeException | IOException runtimeException) {
+            Alert a = new Alert(Alert.AlertType.NONE);
+            a.setAlertType(Alert.AlertType.ERROR);
+            a.setContentText("You must select a part in order to modify!");
+            a.show();
+        }
+
+
     }
 
     /**
-     * Delete the selected Part
+     * Delete the selected Part, if no part is selected an error message pops up alerting the user to select a part
+     * if the user selects a part, an alert will appear asking user to confirm deletion.
      */
     @FXML
     void onActionDeletePart() {
-
         Part part = tblViewPart.getSelectionModel().getSelectedItem();
-        if (part == null)
+        if (part == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error!");
+            alert.setContentText("Please select a part.");
+            alert.showAndWait();
             return;
+        }
 
         //Popup for Part Confirmation Delete
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -199,7 +261,8 @@ public class MainWindow  implements Initializable {
 
     /**
      * Delete Selected Part
-      * @param id part id is selected part
+     *
+     * @param id Deletes the part by the id that is supplied in the onActionDeletePart.
      */
     public void deletePart(int id) {
         for (Part Part : Inventory.getAllParts()) {
@@ -211,13 +274,19 @@ public class MainWindow  implements Initializable {
     }
 
     /**
-     * Delete the selected product
+     * Delete the selected Product, if no part is selected an error message pops up alerting the user to select a part
+     * if the user selects a Product, an alert will appear asking user to confirm deletion.
      */
     @FXML
     void onActionDeleteProduct() {
         Product product = tblViewProduct.getSelectionModel().getSelectedItem();
-        if (product == null)
+        if (product == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error!");
+            alert.setContentText("Please select a part.");
+            alert.showAndWait();
             return;
+        }
 
         //Popup for Product Confirmation Delete
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -232,7 +301,8 @@ public class MainWindow  implements Initializable {
 
     /**
      * Delete Selected Product
-     * @param id id is the Selected Part
+     *
+     * @param id Deletes the part by the id that is supplied in the onActionDeleteProduct.
      */
     public void deleteProduct(int id) {
         for (Product Product : Inventory.getAllProducts()) {
@@ -245,8 +315,10 @@ public class MainWindow  implements Initializable {
 
     /**
      * Initializes the Table View
+     *
      * @param url points to the Specified tag, ID, Name, Price, Stock
-     * @param rb Table View
+     * @param rb  populates the tableviews with information gained from Inventory.getAllParts. Sets the parts of the
+     *            items by matching id, name, price, stock to the columns.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {

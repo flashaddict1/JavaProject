@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
     @Override
     /**
-     * Runs on Startup, sets the Stage
+     * Runs on Startup, sets the Stage to the Main Window
      */
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("../View_Controller/MainWindow.fxml"));
@@ -24,7 +24,7 @@ public class Main extends Application {
     }
 
     /**
-     * Populates the Main Window
+     * Populates the Main Window with the information provided
      * @param args Populates the Main Window with preset data
      */
     public static void main(String[] args) {

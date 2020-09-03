@@ -13,8 +13,21 @@ import java.util.Optional;
 
 /**
  * @author Sam Gonzales
+ *
+ * <P>
+ * RUNTIME ERRORS
+ *  Put below and explained in detail on every location that an error can occur.
+ *
+ * FUTURE IMPROVEMENTS
  * Should combine the Add Part and Modify parts menus making for a streamlined experience and shrinking the size of the
- * overall program. Possibly adding in functionallilty to add multiple parts at once.
+ * overall program.
+ * The ability to add multiple parts at once
+ * The ability to view all parts currently existing
+ * Drop Down menu for the machine code already added to add more that match.
+ * Drop down menu for companies already added to quickly add more.
+ * Live editing that will not allow the user to type anything in the inventory field that is larger than Max
+ * Live editing that will not allow for the user to type anything in the Min field that is larger than Max
+ * </P>
  */
 
 public class AddPart {
@@ -53,8 +66,12 @@ public class AddPart {
     /**
      * Canceling adding a part
      *
-     * @param event Cancels adding the part, Alerts the user to confirm canceling the part. Alerts the user if program
-     *              is unable to return to main window.
+     * @param event Confirms that the user wants to cancel creation of a new form. Cancels the creation of a new part.
+     *              Returns to the Main Window and clears out the information already entered into the form.
+     *
+     *              Error Exception happens when the Main window is not able to be loaded.
+     *              This causes the application to stall and not proceed any farther as there is no window for the user
+     *              to return to.
      */
     @FXML
     public void partCancel(javafx.event.ActionEvent event) {
@@ -78,8 +95,13 @@ public class AddPart {
 
     /**
      * Saves the part
-     * @param event Saves the part and uses the details provided by the user, if the user enters an invalid character,
-     *              it will alert the user if they do not create the part with alphanumeric charters.
+     * @param event Saves the Part that the user is creating. Takes the ID, Name, Inventory, Min, and Max from the form
+     *              and saves it. After the part is saved into memory, the user is then brought into the Main Window.
+     *
+     *              Error checking happens if the user tries to enter in a Min amount that is greater then Max.
+     *              Error checking happens if the user tries to enter in an Inv amount that is greater than Max.
+     *              Error checking happens if the user does not fill in the form to completion alerting the user
+     *              to finish editing the form.
      */
     @FXML
     public void onActionSave(javafx.event.ActionEvent event) {

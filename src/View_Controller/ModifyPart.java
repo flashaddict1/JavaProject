@@ -16,8 +16,21 @@ import java.io.IOException;
 
 /**
  * @author Sam Gonzales
+ *
+ * <P>
+ * RUNTIME ERRORS
+ *  Put below and explained in detail on every location that an error can occur.
+ *
+ * FUTURE IMPROVEMENTS
  * Should combine the Add Part and Modify parts menus making for a streamlined experience and shrinking the size of the
- * overall program. Possibly adding in functionallilty to edit multiple parts at once.
+ * overall program.
+ * The ability to Modify multiple parts at once
+ * The ability to view all parts currently existing
+ * Drop Down menu for the machine code already added to add more that match.
+ * Drop down menu for companies already added to quickly add more.
+ * Live editing that will not allow the user to type anything in the inventory field that is larger than Max
+ * Live editing that will not allow for the user to type anything in the Min field that is larger than Max
+ * </P>
  */
 
 public class ModifyPart {
@@ -45,10 +58,14 @@ public class ModifyPart {
     private Label lblMachineText;
 
     /**
-     * Cancels modifying the part
+     * Canceling Modifying a part
      *
-     * @param event Cancels modifying the part and returns to the Main Window, if unable to return to the main window
-     *              an alert pops up notifying the user.
+     * @param event Confirms that the user wants to cancel Modifying of a new part. Cancels the Modifying of a part.
+     *              Returns to the Main Window and clears out the information already entered into the form.
+     *
+     *              Error Exception happens when the Main window is not able to be loaded.
+     *              This causes the application to stall and not proceed any farther as there is no window for the user
+     *              to return to.
      */
     public void onActionCancelModifyPart(javafx.event.ActionEvent event) {
         try {
@@ -78,7 +95,7 @@ public class ModifyPart {
 
     /**
      * @param part Gets the data for the part being modified, matches it up with the ID part specified.
-     *             if the radio has Machine ID selected,
+     *             Matches it to the radio button as well if the part is Machine or Outsourced.
      */
     public void getPart(Part part) {
         modifyPart = part;
@@ -101,9 +118,13 @@ public class ModifyPart {
 
     /**
      * Saves the part
+     * @param event Saves the Part that the user is Modifying. Takes the ID, Name, Inventory, Min, and Max from the form
+     *              and saves it. After the part is saved into memory, the user is then brought into the Main Window.
      *
-     * @param event Saves the part and uses the details provided by the user, if the user enters an invalid character,
-     *              it will alert the user if Min is larger than Max or if Inventory is greater than MAX
+     *              Error checking happens if the user tries to enter in a Min amount that is greater then Max.
+     *              Error checking happens if the user tries to enter in an Inv amount that is greater than Max.
+     *              Error checking happens if the user does not fill in the form to completion alerting the user
+     *              to finish editing the form.
      */
     @FXML
     public void onActionSavePart(javafx.event.ActionEvent event) {

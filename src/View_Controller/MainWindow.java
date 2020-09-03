@@ -14,15 +14,26 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
  * @author Sam Gonzales
- * Should add functionallity to select more than one part at a time to modify or delete.
+ *
+ * <P>
+ * Error Exception
+ * Put below and explained in detail on every location that an error can occur.
+ *
+ * FUTURE IMPROVEMENTS
+ * Should add functionallity to select more than one part at a time to modify in bulk
+ * Should add functionallity to select more than one part at a time to delete in bulk
+ * Should add functionallity to select more than one product at a time to modify in bulk
+ * Should add functionallity to select more than one product at a time to delete in bulk
  * Should add the ability to have the search field update while the user is typing.
+ * Adding in functionallty to see what parts that are assocaited with products live would benifit the user as well
+ * to let them see if they need to modify the item before going through the steps.
+ * </P>
  */
 
 public class MainWindow implements Initializable {
@@ -62,6 +73,9 @@ public class MainWindow implements Initializable {
     /**
      * Opens up the Add Part Menu
      *
+     * Error Exception happens if the Part menu does not exist or if the program is unable to open the Form up.
+     * This causes the application to stall and not proceed any farther as there is no window for the user to return to.
+     *
      * @param event Changes the Stage to Add Part Menu if unable to open Add Part Menu an alert pops up alerting the
      *              user that system was unable to open up the menu.
      */
@@ -73,19 +87,22 @@ public class MainWindow implements Initializable {
             stage.setTitle("Add Part");
             stage.setScene(new Scene((Parent) scene));
             stage.show();
-        } catch (RuntimeException | IOException runtimeException) {
-            Alert a = new Alert(Alert.AlertType.NONE);
-            a.setAlertType(Alert.AlertType.ERROR);
-            a.setContentText("Unable to open the Add a Part Menu!");
-            a.show();
+        } catch (Exception openAddPartMenu) {
+            Alert addPartMenu = new Alert(Alert.AlertType.NONE);
+            addPartMenu.setAlertType(Alert.AlertType.ERROR);
+            addPartMenu.setContentText("Unable to open the Add a Part Menu!");
+            addPartMenu.show();
         }
     }
 
     /**
      * Opens up the Add Product Menu
      *
-     * @param event Changes the Stage to Add Product Menu if unable to open Add Product Menu an alert pops up alerting
-     *              the user that system was unable to open up the menu.
+     * Error Exception happens if the Product menu does not exist or if the program is unable to open the Form up.
+     * This causes the application to stall and not proceed any farther as there is no window for the user to return to.
+     *
+     * @param event Changes the Stage to Add Product Menu if unable to open Add Part Menu an alert pops up alerting the
+     *              user that system was unable to open up the menu.
      */
     @FXML
     public void OpenAddProductMenu(ActionEvent event) {
@@ -94,19 +111,19 @@ public class MainWindow implements Initializable {
             scene = FXMLLoader.load(getClass().getResource("../View_Controller/AddProduct.fxml"));
             stage.setScene(new Scene(scene));
             stage.show();
-        } catch (RuntimeException | IOException runtimeException) {
-            Alert a = new Alert(Alert.AlertType.NONE);
-            a.setAlertType(Alert.AlertType.ERROR);
-            a.setContentText("Unable to open the Add a Product Menu!");
-            a.show();
+        } catch (Exception openAddProductMenu) {
+            Alert AddProductMenu = new Alert(Alert.AlertType.NONE);
+            AddProductMenu.setAlertType(Alert.AlertType.ERROR);
+            AddProductMenu.setContentText("Unable to open the Add a Product Menu!");
+            AddProductMenu.show();
         }
     }
 
     /**
      * Opens Modify Part Menu and completes the form with the data selected
+     * Error Exception happens when the does not select a part to modify
      *
-     * @param event Changes the stage to Modify Part Menu if the user has a part selected, if the user does not have
-     *              a part selected an alert will alert the user to select the part before being able to proceed.
+     * @param event Allows the user to select a part to add and changes the scene to the Modify Part Menu
      */
     @FXML
     public void onActionModifyPart(javafx.event.ActionEvent event) {
@@ -199,6 +216,8 @@ public class MainWindow implements Initializable {
     /**
      * Opens Modify Product Menu and completes the form with the data selected
      *
+     * Error Exception happens when the user tries to modify a part, but does not select one to modify.
+     *
      * @param event Changes the stage to Modify Product Menu if the user has a part selected, if the user does not have
      *              a part selected an alert will alert the user to select the part before being able to proceed.
      */
@@ -223,17 +242,19 @@ public class MainWindow implements Initializable {
             stage.show();
             ModifyProduct modifyProductController = Loader.getController();
             modifyProductController.selectedProduct(product.getId());
-        } catch (RuntimeException | IOException runtimeException) {
-            Alert a = new Alert(Alert.AlertType.NONE);
-            a.setAlertType(Alert.AlertType.ERROR);
-            a.setContentText("You must select a part in order to modify!");
-            a.show();
+        } catch (Exception selectModifyPartError) {
+            Alert selectModifyPart = new Alert(Alert.AlertType.NONE);
+            selectModifyPart.setAlertType(Alert.AlertType.ERROR);
+            selectModifyPart.setContentText("You must select a part in order to modify!");
+            selectModifyPart.show();
         }
     }
 
     /**
      * Delete the selected Part, if no part is selected an error message pops up alerting the user to select a part
      * if the user selects a part, an alert will appear asking user to confirm deletion.
+     *
+     * Error Exception happens when a user tries to delete a part, but the program is unable to delete it.
      */
     @FXML
     void onActionDeletePart() {
@@ -256,15 +277,17 @@ public class MainWindow implements Initializable {
             System.out.println("Part " + part.getName() + " has been deleted!");
             deletePart(part.getId());
         } else {
-            Alert alert1 = new Alert(Alert.AlertType.ERROR);
-            alert1.setTitle("Error!");
-            alert1.setContentText("Unable to delete Part!.");
-            alert1.showAndWait();
+            Alert deletePartError = new Alert(Alert.AlertType.ERROR);
+            deletePartError.setTitle("Error!");
+            deletePartError.setContentText("Unable to delete Part!.");
+            deletePartError.showAndWait();
         }
     }
 
     /**
-     * Delete Selected Part
+     * Delete Selected Part from the database
+     *
+     * Error Exception happens when the user tries to delete a part, but the part is not selected.
      *
      * @param id Deletes the part by the id that is supplied in the onActionDeletePart.
      */
@@ -275,7 +298,7 @@ public class MainWindow implements Initializable {
                 if (selectedPart != null) {
                     Alert a = new Alert(Alert.AlertType.NONE);
                     a.setAlertType(Alert.AlertType.ERROR);
-                    a.setContentText("Error unable to associate part");
+                    a.setContentText("Error unable delete part because it doesn't exist");
                     a.show();
                 } else {
                     Inventory.getAllParts().remove(Part);
@@ -286,8 +309,12 @@ public class MainWindow implements Initializable {
     }
 
     /**
-     * Delete the selected Product, if no part is selected an error message pops up alerting the user to select a part
+     * Delete the selected Product, if no part is selected an error message pops up alerting the user to select a Product
      * if the user selects a Product, an alert will appear asking user to confirm deletion.
+     *
+     * Error Exception happens when a user tries to delete a part, but the program is unable to delete it.
+     * If a user tries to delete a product that has an association with a part it will return an error notifing the
+     * user that they must remove the assocaition first.
      */
     @FXML
     void onActionDeleteProduct() {
@@ -323,9 +350,11 @@ public class MainWindow implements Initializable {
     }
 
     /**
-     * Delete Selected Product
+     * Delete Selected Product from the database
      *
-     * @param id Deletes the part by the id that is supplied in the onActionDeleteProduct.
+     * Error Exception happens when the user tries to delete a Product, but the Product is not selected.
+     *
+     * @param id Deletes the Product by the id that is supplied in the onActionDeleteProduct.
      */
     public void deleteProduct(int id) {
         for (Product Product : Inventory.getAllProducts()) {
@@ -337,7 +366,8 @@ public class MainWindow implements Initializable {
     }
 
     /**
-     * Initializes the Table View
+     * Initializes the Table View. The second table view is populated will parts that are being associated with the
+     * product.
      *
      * @param url points to the Specified tag, ID, Name, Price, Stock
      * @param rb  populates the tableviews with information gained from Inventory.getAllParts. Sets the parts of the

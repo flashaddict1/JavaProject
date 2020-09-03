@@ -15,7 +15,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
@@ -23,10 +22,29 @@ import java.util.ResourceBundle;
 
 /**
  * @author Sam Gonzales
- * Improvements can be made to combine the modify and add products menus to create a more streamlined experience, should
- * also reduce the size of the program overall.
- * Search fields can also be adjusted to allow for updating as the user types the product.
- * Should also add a way to see how many are still left in the inventory
+ *
+ * <P>
+ * Runtime Errors
+ * Put below and explained in detail on every location that an error can occur.
+ *
+ * FUTURE IMPROVEMENTS
+ * Should combine the Add Product and Modify Product menus making for a streamlined experience and shrinking the size of the
+ * overall program.
+ * The ability to Modify multiple parts at once
+ * The ability to view all parts currently existing
+ * Drop Down menu for the machine code already added to add additional with the same code without typing the whole thing.
+ * Drop down menu for companies already added to quickly add more.
+ * Live editing that will not allow the user to type anything in the inventory field that is larger than Max
+ * Live editing that will not allow for the user to type anything in the Min field that is larger than Max
+ * Search field on the top can be updated to allow for instant results as the user is typing instead of what currently
+ * happens as the user currently has to push enter to search.
+ * Allowing the user to select multiple parts to add into the association at once will be benifical when the list has
+ * a large number of parts for the user to go through.
+ * Allowing the user to select multiple parts to unassociate at once will be benifical to the user when there is a large
+ * number of items that are associated.
+ * Allowing the user to remove the assocaition of all parts will help out as well if the user doesn't need any of the
+ * associations.
+ * </P>
  */
 
 public class ModifyProduct implements Initializable {
@@ -77,9 +95,10 @@ public class ModifyProduct implements Initializable {
 
     /**
      * Cancels modifying the part
+     * Error Exception happens when a user is unable to return to the main window an alert pops up notifying the user
+     * that the form is no longer found.
      *
-     * @param event Cancels modifying the part and returns to the Main Window, if unable to return to the main window
-     *              an alert pops up notifying the user.
+     * @param event Cancels modifying the part and returns to the Main Window
      */
     public void ModifyProductCancel(javafx.event.ActionEvent event) {
         try {
@@ -119,9 +138,12 @@ public class ModifyProduct implements Initializable {
     }
 
     /**
-     * Searches the Product Tableview for parts depending on the text in txtPartSearch field, the field can search
-     * Alphanumeric characters. Users are able to search for ID and/or Name or parts. If the field is left blank
-     * the Tableview shows all parts in the database.
+     * Searches the Product  for parts depending on the text in txtProdSeearch field. The user must use alphanumeric
+     * characters when searching. Users have the ability to search by Product Name and by Product ID.
+     * If the field is left blank the Tableview shows all Products in the database.
+     *
+     * Error Exception happens when the user uses the search field and the field has non Alphanumeric characters.
+     * The user will be unable to proceed further and will need to change the fields to the appropriate data type.
      */
     @FXML
     void onActionSearchProduct() {
@@ -140,7 +162,9 @@ public class ModifyProduct implements Initializable {
     }
 
     /**
-     * Creates associations with the part being created. Alerts the user if unable to add part to association
+     * Creates associations with the part being created
+     *
+     * Error Exception happens and alerts the user if unable to add part to association.
      */
     public void onActionAddPart() {
         Part selectedPart = tblViewProduct1.getSelectionModel().getSelectedItem();
@@ -155,7 +179,10 @@ public class ModifyProduct implements Initializable {
     }
 
     /**
-     * Deletes the part association
+     * Removes the part association with the part currently being added. The user will have an alert popup confirming
+     * that they would like the remove the association.
+     *
+     * Error Exception happens if the user tries to remove the association if there was no association to begin with.
      */
     public void onActionDeletePart() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -176,10 +203,14 @@ public class ModifyProduct implements Initializable {
     }
 
     /**
-     * Saves the Product
+     * Saves the part
+     * @param event Saves the Part that the user is Modifying. Takes the ID, Name, Inventory, Min, and Max from the form
+     *              and saves it. After the part is saved into memory, the user is then brought into the Main Window.
      *
-     * @param event Saves the part and uses the details provided by the user, if the user enters an invalid character,
-     *              it will alert the user if Min is larger than Max or if Inventory is greater than MAX
+     *              Error checking happens if the user tries to enter in a Min amount that is greater then Max.
+     *              Error checking happens if the user tries to enter in an Inv amount that is greater than Max.
+     *              Error checking happens if the user does not fill in the form to completion alerting the user
+     *              to finish editing the form.
      */
     @FXML
     public void onActionSaveProduct(javafx.event.ActionEvent event) {
@@ -223,7 +254,8 @@ public class ModifyProduct implements Initializable {
     }
 
     /**
-     * Initializes the Table View
+     * Initializes the Table View. The second table view is populated will parts that are being associated with the
+     * product.
      *
      * @param url points to the Specified tag, ID, Name, Price, Stock
      * @param rb  populates the tableviews with information gained from Inventory.getAllParts. Sets the parts of the

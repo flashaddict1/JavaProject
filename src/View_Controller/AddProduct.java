@@ -15,7 +15,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -184,18 +183,18 @@ public class AddProduct implements Initializable {
 
             //Error if Min is Greater then Max field
             if (min > max) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error!");
-                alert.setContentText("Quantity Min needs to be smaller than Max");
-                alert.showAndWait();
+                Alert minGreaterMax = new Alert(Alert.AlertType.ERROR);
+                minGreaterMax.setTitle("Error!");
+                minGreaterMax.setContentText("Quantity Min needs to be smaller than Max");
+                minGreaterMax.showAndWait();
                 return;
             }
             //Error if Inventory is Greater then Max Field
             if (stock > max) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error!");
-                alert.setContentText("Inventory Min needs to be smaller than Max");
-                alert.showAndWait();
+                Alert invGreaterMax = new Alert(Alert.AlertType.ERROR);
+                invGreaterMax.setTitle("Error!");
+                invGreaterMax.setContentText("Inventory Min needs to be smaller than Max");
+                invGreaterMax.showAndWait();
                 return;
             }
 
@@ -207,11 +206,11 @@ public class AddProduct implements Initializable {
             stage.setScene(new Scene((Parent) scene));
             stage.show();
 
-        } catch (NumberFormatException | IOException numberFormatException) {
-            Alert a = new Alert(Alert.AlertType.NONE);
-            a.setAlertType(Alert.AlertType.ERROR);
-            a.setContentText("Invalid Character! Part must only contain AlphaNumeric characters!");
-            a.show();
+        } catch (Exception invalidCharError) {
+            Alert invalidCharAlert = new Alert(Alert.AlertType.NONE);
+            invalidCharAlert.setAlertType(Alert.AlertType.ERROR);
+            invalidCharAlert.setContentText("Invalid Character! Part must only contain AlphaNumeric characters!");
+            invalidCharAlert.show();
         }
     }
 
@@ -227,10 +226,10 @@ public class AddProduct implements Initializable {
         if (selectedPart != null) {
             addedParts.add(selectedPart);
         } else {
-            Alert a = new Alert(Alert.AlertType.NONE);
-            a.setAlertType(Alert.AlertType.ERROR);
-            a.setContentText("Error unable to associate part");
-            a.show();
+            Alert assPartAlert = new Alert(Alert.AlertType.NONE);
+            assPartAlert.setAlertType(Alert.AlertType.ERROR);
+            assPartAlert.setContentText("Error unable to associate part");
+            assPartAlert.show();
         }
     }
 

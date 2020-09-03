@@ -227,10 +227,10 @@ public class MainWindow implements Initializable {
             //Selects Table View Row
             Product product = tblViewProduct.getSelectionModel().getSelectedItem();
             if (product == null) {
-                Alert a = new Alert(Alert.AlertType.NONE);
-                a.setAlertType(Alert.AlertType.ERROR);
-                a.setContentText("You must select a part in order to modify!");
-                a.show();
+                Alert selectPartModify = new Alert(Alert.AlertType.NONE);
+                selectPartModify.setAlertType(Alert.AlertType.ERROR);
+                selectPartModify.setContentText("You must select a part in order to modify!");
+                selectPartModify.show();
                 return;
             }
             //Opens Modify Menu
@@ -260,10 +260,10 @@ public class MainWindow implements Initializable {
     void onActionDeletePart() {
         Part part = tblViewPart.getSelectionModel().getSelectedItem();
         if (part == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error!");
-            alert.setContentText("Please select a part.");
-            alert.showAndWait();
+            Alert selectPartAlert = new Alert(Alert.AlertType.ERROR);
+            selectPartAlert.setTitle("Error!");
+            selectPartAlert.setContentText("Please select a part.");
+            selectPartAlert.showAndWait();
             return;
         }
 
@@ -296,10 +296,10 @@ public class MainWindow implements Initializable {
             if (Part.getId() == id) {
                 Part selectedPart = tblViewPart.getSelectionModel().getSelectedItem();
                 if (selectedPart != null) {
-                    Alert a = new Alert(Alert.AlertType.NONE);
-                    a.setAlertType(Alert.AlertType.ERROR);
-                    a.setContentText("Error unable delete part because it doesn't exist");
-                    a.show();
+                    Alert deletePartAlert = new Alert(Alert.AlertType.NONE);
+                    deletePartAlert.setAlertType(Alert.AlertType.ERROR);
+                    deletePartAlert.setContentText("Error unable delete part because it doesn't exist");
+                    deletePartAlert.show();
                 } else {
                     Inventory.getAllParts().remove(Part);
                 }
@@ -322,10 +322,10 @@ public class MainWindow implements Initializable {
         //Popup for Product Confirmation Delete
 
         if (product == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error!");
-            alert.setContentText("Please select a part.");
-            alert.showAndWait();
+            Alert selectPartAlert = new Alert(Alert.AlertType.ERROR);
+            selectPartAlert.setTitle("Error!");
+            selectPartAlert.setContentText("Please select a part.");
+            selectPartAlert.showAndWait();
             return;
         }
 

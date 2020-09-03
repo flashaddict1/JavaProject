@@ -74,11 +74,11 @@ public class ModifyPart {
             stage.setTitle("Inventory Management System");
             stage.setScene(new Scene((Parent) scene));
             stage.show();
-        } catch (IOException e) {
-            Alert a = new Alert(Alert.AlertType.NONE);
-            a.setAlertType(Alert.AlertType.ERROR);
-            a.setContentText("Unable to find the Main Window");
-            a.show();
+        } catch (Exception modifyPartError) {
+            Alert ModifyPartAlert = new Alert(Alert.AlertType.NONE);
+            ModifyPartAlert.setAlertType(Alert.AlertType.ERROR);
+            ModifyPartAlert.setContentText("Unable to find the Main Window");
+            ModifyPartAlert.show();
         }
     }
 
@@ -147,18 +147,18 @@ public class ModifyPart {
 
                 //Error if Min is Greater then Max field
                 if (min > max) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error!");
-                    alert.setContentText("Quantity Min needs to be smaller than Max");
-                    alert.showAndWait();
+                    Alert minGreaterMax = new Alert(Alert.AlertType.ERROR);
+                    minGreaterMax.setTitle("Error!");
+                    minGreaterMax.setContentText("Quantity Min needs to be smaller than Max");
+                    minGreaterMax.showAndWait();
                     return;
                 }
                 //Error if Inventory is Greater then Max Field
                 if (invMax > max) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error!");
-                    alert.setContentText("Inventory needs to be smaller than Max");
-                    alert.showAndWait();
+                    Alert InvGreaterMax = new Alert(Alert.AlertType.ERROR);
+                    InvGreaterMax.setTitle("Error!");
+                    InvGreaterMax.setContentText("Inventory needs to be smaller than Max");
+                    InvGreaterMax.showAndWait();
                     return;
                 }
 
@@ -186,18 +186,18 @@ public class ModifyPart {
 
                 //Error if Min is Greater then Max field
                 if (min > max) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error!");
-                    alert.setContentText("Quantity Min needs to be smaller than Max");
-                    alert.showAndWait();
+                    Alert minGreaterMax = new Alert(Alert.AlertType.ERROR);
+                    minGreaterMax.setTitle("Error!");
+                    minGreaterMax.setContentText("Quantity Min needs to be smaller than Max");
+                    minGreaterMax.showAndWait();
                     return;
                 }
                 //Error if Inventory is Greater then Max Field
                 if (invMax > max) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error!");
-                    alert.setContentText("Inventory needs to be smaller than Max");
-                    alert.showAndWait();
+                    Alert InvGreaterMax = new Alert(Alert.AlertType.ERROR);
+                    InvGreaterMax.setTitle("Error!");
+                    InvGreaterMax.setContentText("Inventory needs to be smaller than Max");
+                    InvGreaterMax.showAndWait();
                     return;
                 }
 
@@ -209,11 +209,11 @@ public class ModifyPart {
                 stage.setScene(new Scene((Parent) scene));
                 stage.show();
             }
-        } catch (Exception e) {
-            Alert a = new Alert(Alert.AlertType.NONE);
-            a.setAlertType(Alert.AlertType.ERROR);
-            a.setContentText("Unable to Modify the part, Use Alphanumeric Characters only!");
-            a.show();
+        } catch (Exception addPartError) {
+            Alert addPartAlert = new Alert(Alert.AlertType.NONE);
+            addPartAlert.setAlertType(Alert.AlertType.ERROR);
+            addPartAlert.setContentText("Unable to Modify the part, Use Alphanumeric Characters only!");
+            addPartAlert.show();
         }
     }
 

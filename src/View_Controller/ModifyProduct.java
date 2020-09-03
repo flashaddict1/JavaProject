@@ -107,11 +107,11 @@ public class ModifyProduct implements Initializable {
             stage.setTitle("Inventory Management System");
             stage.setScene(new Scene((Parent) scene));
             stage.show();
-        } catch (IOException e) {
-            Alert a = new Alert(Alert.AlertType.NONE);
-            a.setAlertType(Alert.AlertType.ERROR);
-            a.setContentText("Unable to find the Main Window");
-            a.show();
+        } catch (Exception modifyCancelError) {
+            Alert modifyCancelAlert = new Alert(Alert.AlertType.NONE);
+            modifyCancelAlert.setAlertType(Alert.AlertType.ERROR);
+            modifyCancelAlert.setContentText("Unable to find the Main Window");
+            modifyCancelAlert.show();
         }
     }
 
@@ -171,10 +171,10 @@ public class ModifyProduct implements Initializable {
         if (selectedPart != null) {
             addedParts.add(selectedPart);
         } else {
-            Alert a = new Alert(Alert.AlertType.NONE);
-            a.setAlertType(Alert.AlertType.ERROR);
-            a.setContentText("No Part Selected to add.");
-            a.show();
+            Alert addPartAlert = new Alert(Alert.AlertType.NONE);
+            addPartAlert.setAlertType(Alert.AlertType.ERROR);
+            addPartAlert.setContentText("No Part Selected to add.");
+            addPartAlert.show();
         }
     }
 
@@ -194,10 +194,10 @@ public class ModifyProduct implements Initializable {
                 addedParts.remove(selectedPart);
                 System.out.println("Removed association!");
             } else {
-                Alert a = new Alert(Alert.AlertType.NONE);
-                a.setAlertType(Alert.AlertType.ERROR);
-                a.setContentText("You must select a part to remove from association.");
-                a.show();
+                Alert removeAssAlert = new Alert(Alert.AlertType.NONE);
+                removeAssAlert.setAlertType(Alert.AlertType.ERROR);
+                removeAssAlert.setContentText("You must select a part to remove from association.");
+                removeAssAlert.show();
             }
         }
     }
@@ -245,11 +245,11 @@ public class ModifyProduct implements Initializable {
             stage.setTitle("Inventory Management System");
             stage.setScene(new Scene((Parent) scene));
             stage.show();
-        } catch (Exception e) {
-            Alert a = new Alert(Alert.AlertType.NONE);
-            a.setAlertType(Alert.AlertType.ERROR);
-            a.setContentText("Unable to Modify the Product, Use Alphanumeric Characters only!");
-            a.show();
+        } catch (Exception modifyProductError) {
+            Alert modifyProductAlert = new Alert(Alert.AlertType.NONE);
+            modifyProductAlert.setAlertType(Alert.AlertType.ERROR);
+            modifyProductAlert.setContentText("Unable to Modify the Product, Use Alphanumeric Characters only!");
+            modifyProductAlert.show();
         }
     }
 
@@ -277,11 +277,11 @@ public class ModifyProduct implements Initializable {
             tblColProdName2.setCellValueFactory(new PropertyValueFactory<>("name"));
             tblColProdCost2.setCellValueFactory(new PropertyValueFactory<>("price"));
             tblColProdInvLvl2.setCellValueFactory(new PropertyValueFactory<>("stock"));
-        } catch (Exception UnableToLoad) {
-            Alert a = new Alert(Alert.AlertType.NONE);
-            a.setAlertType(Alert.AlertType.ERROR);
-            a.setContentText("Unable to load the table view!");
-            a.show();
+        } catch (Exception UnableToLoadError) {
+            Alert UnableToLoadAlert = new Alert(Alert.AlertType.NONE);
+            UnableToLoadAlert.setAlertType(Alert.AlertType.ERROR);
+            UnableToLoadAlert.setContentText("Unable to load the table view!");
+            UnableToLoadAlert.show();
         }
     }
 }

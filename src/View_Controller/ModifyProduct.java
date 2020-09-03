@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -144,10 +145,12 @@ public class ModifyProduct implements Initializable {
     public void onActionAddPart() {
         Part selectedPart = tblViewProduct1.getSelectionModel().getSelectedItem();
         if (selectedPart != null) {
-            // Add part into the ObservableList<> addedParts
             addedParts.add(selectedPart);
         } else {
-            System.out.println("No Part selected");
+            Alert a = new Alert(Alert.AlertType.NONE);
+            a.setAlertType(Alert.AlertType.ERROR);
+            a.setContentText("No Part Selected to add.");
+            a.show();
         }
     }
 
@@ -155,11 +158,20 @@ public class ModifyProduct implements Initializable {
      * Deletes the part association
      */
     public void onActionDeletePart() {
-        Part selectedPart = tblViewProduct2.getSelectionModel().getSelectedItem();
-        if (selectedPart != null) {
-            addedParts.remove(selectedPart);
-        } else {
-            System.out.println("No part selected");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setContentText("Are you sure you want to delete the association?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            Part selectedPart = tblViewProduct2.getSelectionModel().getSelectedItem();
+            if (selectedPart != null) {
+                addedParts.remove(selectedPart);
+                System.out.println("Removed association!");
+            } else {
+                Alert a = new Alert(Alert.AlertType.NONE);
+                a.setAlertType(Alert.AlertType.ERROR);
+                a.setContentText("You must select a part to remove from association.");
+                a.show();
+            }
         }
     }
 
@@ -219,19 +231,26 @@ public class ModifyProduct implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //Products Table View Information 1
-        tblViewProduct1.setItems(Inventory.getAllParts());
-        tblColProdId1.setCellValueFactory(new PropertyValueFactory<>("id"));
-        tblColProdName1.setCellValueFactory(new PropertyValueFactory<>("name"));
-        tblColProdCost1.setCellValueFactory(new PropertyValueFactory<>("price"));
-        tblColProdInvLvl1.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        try {
+            //Products Table View Information 1
+            tblViewProduct1.setItems(Inventory.getAllParts());
+            tblColProdId1.setCellValueFactory(new PropertyValueFactory<>("id"));
+            tblColProdName1.setCellValueFactory(new PropertyValueFactory<>("name"));
+            tblColProdCost1.setCellValueFactory(new PropertyValueFactory<>("price"));
+            tblColProdInvLvl1.setCellValueFactory(new PropertyValueFactory<>("stock"));
 
-        //Products Table View Information 2
-        tblViewProduct2.setItems(addedParts);
-        tblColProdId2.setCellValueFactory(new PropertyValueFactory<>("id"));
-        tblColProdName2.setCellValueFactory(new PropertyValueFactory<>("name"));
-        tblColProdCost2.setCellValueFactory(new PropertyValueFactory<>("price"));
-        tblColProdInvLvl2.setCellValueFactory(new PropertyValueFactory<>("stock"));
+            //Products Table View Information 2
+            tblViewProduct2.setItems(addedParts);
+            tblColProdId2.setCellValueFactory(new PropertyValueFactory<>("id"));
+            tblColProdName2.setCellValueFactory(new PropertyValueFactory<>("name"));
+            tblColProdCost2.setCellValueFactory(new PropertyValueFactory<>("price"));
+            tblColProdInvLvl2.setCellValueFactory(new PropertyValueFactory<>("stock"));
+        } catch (Exception UnableToLoad) {
+            Alert a = new Alert(Alert.AlertType.NONE);
+            a.setAlertType(Alert.AlertType.ERROR);
+            a.setContentText("Unable to load the table view!");
+            a.show();
+        }
     }
 }
 

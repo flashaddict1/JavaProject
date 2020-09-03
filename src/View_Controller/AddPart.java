@@ -9,7 +9,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import java.io.IOException;
 import java.util.Optional;
 
 /**
@@ -60,20 +59,20 @@ public class AddPart {
     @FXML
     public void partCancel(javafx.event.ActionEvent event) {
         try {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setContentText("Are you sure you want to quit adding a part");
-            Optional<ButtonType> result = alert.showAndWait();
+            Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmDelete.setContentText("Are you sure you want to quit adding a part");
+            Optional<ButtonType> result = confirmDelete.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
                 scene = FXMLLoader.load(getClass().getResource("../View_Controller/MainWindow.fxml"));
                 stage.setScene(new Scene(scene));
                 stage.show();
             }
-        } catch (RuntimeException | IOException runtimeException) {
-            Alert a = new Alert(Alert.AlertType.NONE);
-            a.setAlertType(Alert.AlertType.ERROR);
-            a.setContentText("Unable to find the Main Window");
-            a.show();
+        } catch (Exception windowNotFound) {
+            Alert lostMain = new Alert(Alert.AlertType.NONE);
+            lostMain.setAlertType(Alert.AlertType.ERROR);
+            lostMain.setContentText("Unable to find the Main Window Form.");
+            lostMain.show();
         }
     }
 
@@ -92,6 +91,23 @@ public class AddPart {
             int min = Integer.parseInt(txtPartMin.getText());
             int max = Integer.parseInt(txtPartMax.getText());
 
+            //Error if Min is Greater then Max field
+            if (min > max) {
+                Alert minGreaterMax = new Alert(Alert.AlertType.ERROR);
+                minGreaterMax.setTitle("Error!");
+                minGreaterMax.setContentText("Quantity Min needs to be smaller than Max");
+                minGreaterMax.showAndWait();
+                return;
+            }
+            //Error if Inventory is Greater then Max Field
+            if (stock > max) {
+                Alert invGreaterMax = new Alert(Alert.AlertType.ERROR);
+                invGreaterMax.setTitle("Error!");
+                invGreaterMax.setContentText("Inventory needs to be smaller than Max");
+                invGreaterMax.showAndWait();
+                return;
+            }
+
             //Checks what radio button is selected
             if (rdbOutsourced.isSelected()) {
                 String companyName = txtPartMachineCompanyID.getText();
@@ -106,12 +122,11 @@ public class AddPart {
             scene = FXMLLoader.load(getClass().getResource("../View_Controller/MainWindow.fxml"));
             stage.setScene(new Scene(scene));
             stage.show();
-        } catch (NumberFormatException | IOException numberFormatException) {
-            numberFormatException.printStackTrace();
-            Alert a = new Alert(Alert.AlertType.NONE);
-            a.setAlertType(Alert.AlertType.ERROR);
-            a.setContentText("Invalid Character! Part must only contain AlphaNumeric characters!");
-            a.show();
+        } catch (Exception incompleteForm) {
+            Alert formIncomplete = new Alert(Alert.AlertType.NONE);
+            formIncomplete.setAlertType(Alert.AlertType.ERROR);
+            formIncomplete.setContentText("Form must be filled out completely!");
+            formIncomplete.show();
         }
     }
 }

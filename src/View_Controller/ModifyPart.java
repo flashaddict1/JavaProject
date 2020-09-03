@@ -124,7 +124,7 @@ public class ModifyPart {
                         Integer.parseInt(txtProdMachineCompanyID.getText())
                 );
 
-                //Popup for excessive quantity
+                //Error if Min is Greater then Max field
                 if (min > max) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error!");
@@ -132,10 +132,11 @@ public class ModifyPart {
                     alert.showAndWait();
                     return;
                 }
+                //Error if Inventory is Greater then Max Field
                 if (invMax > max) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error!");
-                    alert.setContentText("Inventory Min needs to be smaller than Max");
+                    alert.setContentText("Inventory needs to be smaller than Max");
                     alert.showAndWait();
                     return;
                 }
@@ -174,7 +175,7 @@ public class ModifyPart {
                 if (invMax > max) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Error!");
-                    alert.setContentText("Inventory Min needs to be smaller than Max");
+                    alert.setContentText("Inventory needs to be smaller than Max");
                     alert.showAndWait();
                     return;
                 }

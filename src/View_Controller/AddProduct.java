@@ -15,9 +15,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -74,11 +74,11 @@ public class AddProduct implements Initializable {
             stage.setTitle("Inventory Management System");
             stage.setScene(new Scene((Parent) scene));
             stage.show();
-        } catch (RuntimeException | IOException runtimeException) {
-            Alert a = new Alert(Alert.AlertType.NONE);
-            a.setAlertType(Alert.AlertType.ERROR);
-            a.setContentText("Unable to find the Main Window");
-            a.show();
+        } catch (Exception invalidWindowLink) {
+            Alert invalidWindow = new Alert(Alert.AlertType.NONE);
+            invalidWindow.setAlertType(Alert.AlertType.ERROR);
+            invalidWindow.setContentText("Unable to find the Main Window");
+            invalidWindow.show();
         }
     }
 
@@ -111,12 +111,20 @@ public class AddProduct implements Initializable {
      */
     @FXML
     void onActionDeletePart() {
-        Part selectedPart = tblViewProduct2.getSelectionModel().getSelectedItem();
-
-        if (selectedPart != null) {
-            addedParts.remove(selectedPart);
-        } else {
-            System.out.println("No part selected");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setContentText("Are you sure you want to delete the association?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            Part selectedPart = tblViewProduct2.getSelectionModel().getSelectedItem();
+            if (selectedPart != null) {
+                addedParts.remove(selectedPart);
+                System.out.println("Removed association!");
+            } else {
+                Alert errorDelete = new Alert(Alert.AlertType.ERROR);
+                errorDelete.setTitle("Error!");
+                errorDelete.setContentText("There is part association.");
+                errorDelete.showAndWait();
+            }
         }
     }
 
@@ -139,6 +147,23 @@ public class AddProduct implements Initializable {
 
             //Add all selected parts to the product
             addedParts.forEach(newProduct::addAssociatedPart);
+
+            //Error if Min is Greater then Max field
+            if (min > max) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error!");
+                alert.setContentText("Quantity Min needs to be smaller than Max");
+                alert.showAndWait();
+                return;
+            }
+            //Error if Inventory is Greater then Max Field
+            if (stock > max) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error!");
+                alert.setContentText("Inventory Min needs to be smaller than Max");
+                alert.showAndWait();
+                return;
+            }
 
             //Return to Main Window
             Inventory.addProduct(newProduct);
@@ -163,7 +188,6 @@ public class AddProduct implements Initializable {
     void onActionAddPart() {
         Part selectedPart = tblViewProduct1.getSelectionModel().getSelectedItem();
         if (selectedPart != null) {
-            // Add part into the ObservableList<> addedParts
             addedParts.add(selectedPart);
         } else {
             Alert a = new Alert(Alert.AlertType.NONE);

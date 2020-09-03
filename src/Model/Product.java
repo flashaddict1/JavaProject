@@ -2,23 +2,24 @@ package Model;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
 /**
  *
  * @author Sam Gonzales
  */
 
 public class Product {
+
     //Product Constructor
-    public Product(String name, int id, double price, int stock, int min, int max, ObservableList<Part> associatedParts) {
-        this.name = name;
+    public Product(int id, String name, double price, int stock, int min, int max) {
         this.id = id;
+        this.name = name;
         this.price = price;
         this.stock = stock;
         this.min = min;
         this.max = max;
-        this.associatedParts.addAll(associatedParts);
+        associatedParts = FXCollections.observableArrayList();
     }
+
 
     /**
      * Declare Products Constructor
@@ -50,7 +51,7 @@ public class Product {
     private int stock;
     private int min;
     private int max;
-    private final ObservableList<Part> associatedParts = FXCollections.observableArrayList();
+    private ObservableList<Part> associatedParts = FXCollections.observableArrayList();
 
     /**
      * Declares the Name getter
@@ -169,5 +170,9 @@ public class Product {
      */
     public void deleteAllAssociatedParts() {
         associatedParts.clear();
+    }
+
+    public ObservableList<Part> getAssociatedParts() {
+        return associatedParts;
     }
 }

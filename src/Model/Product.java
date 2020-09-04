@@ -2,9 +2,16 @@ package Model;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
 /**
+ * Contains the  Construct, Getters and Setters creating the basis for Products
+ * <p>
+ * The form contains the getters, setters for creation of Product. The form also has Constructors used to define the
+ * parameters on which a product is made out of.
+ * Product Constructor is created from ID, Name, Price, Stock (Inventory Amount ), Min and Max values to dictate how
+ * many items can be entered.
  *
- * @author Sam Gonzales
+ * @author Sam
  */
 
 public class Product {
@@ -23,12 +30,13 @@ public class Product {
 
     /**
      * Declare Products Constructor
-     * @param name Sets the name for the Constructor for Products
-     * @param id Sets the id for the Constructor for Products
+     *
+     * @param name  Sets the name for the Constructor for Products
+     * @param id    Sets the id for the Constructor for Products
      * @param price Sets the price for the Constructor for Products
      * @param stock Sets the stock for the Constructor for Products
-     * @param min Sets the min for the Constructor for Products
-     * @param max Sets the max for the Constructor for Products
+     * @param min   Sets the min for the Constructor for Products
+     * @param max   Sets the max for the Constructor for Products
      */
     public Product(String name, int id, double price, int stock, int min, int max) {
         this.name = name;
@@ -55,6 +63,7 @@ public class Product {
 
     /**
      * Declares the Name getter
+     *
      * @return Returns Part Name
      */
     public String getName() {
@@ -63,6 +72,7 @@ public class Product {
 
     /**
      * Declares the ID getter
+     *
      * @return Returns the Part ID
      */
     public int getId() {
@@ -71,6 +81,7 @@ public class Product {
 
     /**
      * Declares the Price getter
+     *
      * @return Returns the Part Price
      */
     public double getPrice() {
@@ -79,6 +90,7 @@ public class Product {
 
     /**
      * Declares the Stock getter
+     *
      * @return Returns the Part Inventory
      */
     public int getStock() {
@@ -87,6 +99,7 @@ public class Product {
 
     /**
      * Declares the Min getter
+     *
      * @return Returns the Part Minimum Inventory
      */
     public int getMin() {
@@ -95,6 +108,7 @@ public class Product {
 
     /**
      * Declares the Part Max getter
+     *
      * @return Returns the Part Max
      */
     public int getMax() {
@@ -103,6 +117,7 @@ public class Product {
 
     /**
      * Declares the Part Name setter
+     *
      * @param name Part Name
      */
     public void setName(String name) {
@@ -111,6 +126,7 @@ public class Product {
 
     /**
      * Declares the Part ID setter
+     *
      * @param id Part ID
      */
     public void setId(int id) {
@@ -119,6 +135,7 @@ public class Product {
 
     /**
      * Declares the Part Price
+     *
      * @param price Part Price
      */
     public void setPrice(double price) {
@@ -127,6 +144,7 @@ public class Product {
 
     /**
      * Declares the Part Inventory
+     *
      * @param inv Part Inventory
      */
     public void setStock(int inv) {
@@ -135,6 +153,7 @@ public class Product {
 
     /**
      * Declares the Part Min
+     *
      * @param min Part Minimum
      */
     public void setMin(int min) {
@@ -143,6 +162,7 @@ public class Product {
 
     /**
      * Declares the Part Max
+     *
      * @param max Part Maximum
      */
     public void setMax(int max) {
@@ -151,14 +171,16 @@ public class Product {
 
     /**
      * Add Associated Part
+     *
      * @param part Add Associated Part
      */
-    public void addAssociatedPart(Part part){
+    public void addAssociatedPart(Part part) {
         this.associatedParts.add(part);
     }
 
     /**
      * Get Associated Part
+     *
      * @return Returns the Associated Part
      */
     public ObservableList<Part> getAllAssociatedParts() {

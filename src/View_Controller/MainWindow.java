@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -21,10 +22,10 @@ import java.util.ResourceBundle;
 /**
  * @author Sam Gonzales
  *
- * <P>
+ * <p>
  * Error Exception
  * Put below and explained in detail on every location that an error can occur.
- *
+ * <p>
  * FUTURE IMPROVEMENTS
  * Should add functionallity to select more than one part at a time to modify in bulk
  * Should add functionallity to select more than one part at a time to delete in bulk
@@ -33,7 +34,6 @@ import java.util.ResourceBundle;
  * Should add the ability to have the search field update while the user is typing.
  * Adding in functionallty to see what parts that are assocaited with products live would benifit the user as well
  * to let them see if they need to modify the item before going through the steps.
- * </P>
  */
 
 public class MainWindow implements Initializable {
@@ -72,7 +72,7 @@ public class MainWindow implements Initializable {
 
     /**
      * Opens up the Add Part Menu
-     *
+     * <p>
      * Error Exception happens if the Part menu does not exist or if the program is unable to open the Form up.
      * This causes the application to stall and not proceed any farther as there is no window for the user to return to.
      *
@@ -97,7 +97,7 @@ public class MainWindow implements Initializable {
 
     /**
      * Opens up the Add Product Menu
-     *
+     * <p>
      * Error Exception happens if the Product menu does not exist or if the program is unable to open the Form up.
      * This causes the application to stall and not proceed any farther as there is no window for the user to return to.
      *
@@ -215,7 +215,7 @@ public class MainWindow implements Initializable {
 
     /**
      * Opens Modify Product Menu and completes the form with the data selected
-     *
+     * <p>
      * Error Exception happens when the user tries to modify a part, but does not select one to modify.
      *
      * @param event Changes the stage to Modify Product Menu if the user has a part selected, if the user does not have
@@ -253,7 +253,7 @@ public class MainWindow implements Initializable {
     /**
      * Delete the selected Part, if no part is selected an error message pops up alerting the user to select a part
      * if the user selects a part, an alert will appear asking user to confirm deletion.
-     *
+     * <p>
      * Error Exception happens when a user tries to delete a part, but the program is unable to delete it.
      */
     @FXML
@@ -286,7 +286,7 @@ public class MainWindow implements Initializable {
 
     /**
      * Delete Selected Part from the database
-     *
+     * <p>
      * Error Exception happens when the user tries to delete a part, but the part is not selected.
      *
      * @param id Deletes the part by the id that is supplied in the onActionDeletePart.
@@ -311,7 +311,7 @@ public class MainWindow implements Initializable {
     /**
      * Delete the selected Product, if no part is selected an error message pops up alerting the user to select a Product
      * if the user selects a Product, an alert will appear asking user to confirm deletion.
-     *
+     * <p>
      * Error Exception happens when a user tries to delete a part, but the program is unable to delete it.
      * If a user tries to delete a product that has an association with a part it will return an error notifing the
      * user that they must remove the assocaition first.
@@ -351,7 +351,7 @@ public class MainWindow implements Initializable {
 
     /**
      * Delete Selected Product from the database
-     *
+     * <p>
      * Error Exception happens when the user tries to delete a Product, but the Product is not selected.
      *
      * @param id Deletes the Product by the id that is supplied in the onActionDeleteProduct.

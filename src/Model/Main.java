@@ -7,15 +7,18 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
- *
+ * Creates the stage for Main window
+ * <p>
+ * Sets the resolution for the program. Creates a few parts to be filled in automatically so the program can be tested.
  * @author Sam Gonzales
  */
 
 public class Main extends Application {
-    @Override
+
     /**
      * Runs on Startup, sets the Stage to the Main Window
      */
+    @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("../View_Controller/MainWindow.fxml"));
         primaryStage.setTitle("Inventory Management System");

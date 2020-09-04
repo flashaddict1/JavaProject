@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -22,10 +23,10 @@ import java.util.ResourceBundle;
 /**
  * @author Sam Gonzales
  *
- * <P>
+ * <p>
  * Runtime Errors
  * Put below and explained in detail on every location that an error can occur.
- *
+ * <p>
  * FUTURE IMPROVEMENTS
  * Should combine the Add Product and Modify Product menus making for a streamlined experience and shrinking the size of the
  * overall program.
@@ -43,7 +44,6 @@ import java.util.ResourceBundle;
  * number of items that are associated.
  * Allowing the user to remove the assocaition of all parts will help out as well if the user doesn't need any of the
  * associations.
- * </P>
  */
 
 public class ModifyProduct implements Initializable {
@@ -140,7 +140,7 @@ public class ModifyProduct implements Initializable {
      * Searches the Product  for parts depending on the text in txtProdSeearch field. The user must use alphanumeric
      * characters when searching. Users have the ability to search by Product Name and by Product ID.
      * If the field is left blank the Tableview shows all Products in the database.
-     *
+     * <p>
      * Error Exception happens when the user uses the search field and the field has non Alphanumeric characters.
      * The user will be unable to proceed further and will need to change the fields to the appropriate data type.
      */
@@ -162,7 +162,7 @@ public class ModifyProduct implements Initializable {
 
     /**
      * Creates associations with the part being created
-     *
+     * <p>
      * Error Exception happens and alerts the user if unable to add part to association.
      */
     public void onActionAddPart() {
@@ -180,7 +180,7 @@ public class ModifyProduct implements Initializable {
     /**
      * Removes the part association with the part currently being added. The user will have an alert popup confirming
      * that they would like the remove the association.
-     *
+     * <p>
      * Error Exception happens if the user tries to remove the association if there was no association to begin with.
      */
     public void onActionDeletePart() {
@@ -203,9 +203,10 @@ public class ModifyProduct implements Initializable {
 
     /**
      * Saves the part
+     *
      * @param event Saves the Part that the user is Modifying. Takes the ID, Name, Inventory, Min, and Max from the form
      *              and saves it. After the part is saved into memory, the user is then brought into the Main Window.
-     *
+     *              <p>
      *              Error checking happens if the user tries to enter in a Min amount that is greater then Max.
      *              Error checking happens if the user tries to enter in an Inv amount that is greater than Max.
      *              Error checking happens if the user does not fill in the form to completion alerting the user
@@ -222,6 +223,15 @@ public class ModifyProduct implements Initializable {
                     int productStock = Integer.parseInt(txtModProdInv.getText());
                     int productMax = Integer.parseInt(txtModProdMax.getText());
                     int productMin = Integer.parseInt(txtModProdMin.getText());
+
+                    //Error if Inv is Less then Zero
+                    if (productStock < 0) {
+                        Alert minGreaterMax = new Alert(Alert.AlertType.ERROR);
+                        minGreaterMax.setTitle("Error!");
+                        minGreaterMax.setContentText("Inventory needs to be greater than 0.");
+                        minGreaterMax.showAndWait();
+                        return;
+                    }
 
                     //Error if Min is Greater then Max field
                     if (productMin > productMax) {

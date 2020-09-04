@@ -1,11 +1,17 @@
 package Model;
 
 /**
+ * Contains the Construct, Getters and Setters creating the basis for Parts
+ * <p>
+ * The form contains the getters, setters for creation of Parts. The form also has Constructors used to define the
+ * parameters on which a Parts is made out of.
+ * Parts Constructor is created from ID, Name, Price, Stock (Inventory Amount ), Min and Max values to dictate how
+ * many items can be entered.
  *
- * @author Sam Gonzales
+ * @author Sam
  */
 
-public class Part{
+public class Part {
     //Declare Fields
     private String name;
     private int id;
@@ -16,12 +22,13 @@ public class Part{
 
     /**
      * Declare Parts Constructor
-     * @param name Sets the name for the Constructor for Parts
-     * @param id Sets the id for the Constructor for Parts
+     *
+     * @param name  Sets the name for the Constructor for Parts
+     * @param id    Sets the id for the Constructor for Parts
      * @param price Sets the price for the Constructor for Parts
      * @param stock Sets the stock for the Constructor for Parts
-     * @param min Sets the min for the Constructor for Parts
-     * @param max Sets the max for the Constructor for Parts
+     * @param min   Sets the min for the Constructor for Parts
+     * @param max   Sets the max for the Constructor for Parts
      */
     public Part(String name, int id, double price, int stock, int min, int max) {
         this.name = name;
@@ -34,6 +41,7 @@ public class Part{
 
     /**
      * Declares the Name getter
+     *
      * @return Returns Part Name
      */
     public String getName() {
@@ -42,6 +50,7 @@ public class Part{
 
     /**
      * Declares the ID getter
+     *
      * @return Returns the Part ID
      */
     public int getId() {
@@ -50,6 +59,7 @@ public class Part{
 
     /**
      * Declares the Price getter
+     *
      * @return Returns the Part Price
      */
     public double getPrice() {
@@ -58,6 +68,7 @@ public class Part{
 
     /**
      * Declares the Stock getter
+     *
      * @return Returns the Part Inventory
      */
     public int getStock() {
@@ -66,6 +77,7 @@ public class Part{
 
     /**
      * Declares the Min getter
+     *
      * @return Returns the Part Minimum Inventory
      */
     public int getMin() {
@@ -74,6 +86,7 @@ public class Part{
 
     /**
      * Declares the Part Max getter
+     *
      * @return Returns the Part Max
      */
     public int getMax() {
@@ -82,7 +95,8 @@ public class Part{
 
     /**
      * Declares the Part Name setter
-      * @param name Part Name
+     *
+     * @param name Part Name
      */
     public void setName(String name) {
         this.name = name;
@@ -90,6 +104,7 @@ public class Part{
 
     /**
      * Declares the Part ID setter
+     *
      * @param id Part ID
      */
     public void setId(int id) {
@@ -98,6 +113,7 @@ public class Part{
 
     /**
      * Declares the Part Price
+     *
      * @param price Part Price
      */
     public void setPrice(double price) {
@@ -106,6 +122,7 @@ public class Part{
 
     /**
      * Declares the Part Min
+     *
      * @param min Part Minimum
      */
     public void setMin(int min) {
@@ -114,6 +131,7 @@ public class Part{
 
     /**
      * Declares the Part Max
+     *
      * @param max Part Maximum
      */
     public void setMax(int max) {

@@ -9,15 +9,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+
 import java.util.Optional;
 
 /**
  * @author Sam Gonzales
  *
- * <P>
+ * <p>
  * RUNTIME ERRORS
- *  Put below and explained in detail on every location that an error can occur.
- *
+ * Put below and explained in detail on every location that an error can occur.
+ * <p>
  * FUTURE IMPROVEMENTS
  * Should combine the Add Part and Modify parts menus making for a streamlined experience and shrinking the size of the
  * overall program.
@@ -27,7 +28,6 @@ import java.util.Optional;
  * Drop down menu for companies already added to quickly add more.
  * Live editing that will not allow the user to type anything in the inventory field that is larger than Max
  * Live editing that will not allow for the user to type anything in the Min field that is larger than Max
- * </P>
  */
 
 public class AddPart {
@@ -68,7 +68,7 @@ public class AddPart {
      *
      * @param event Confirms that the user wants to cancel creation of a new form. Cancels the creation of a new part.
      *              Returns to the Main Window and clears out the information already entered into the form.
-     *
+     *              <p>
      *              Error Exception happens when the Main window is not able to be loaded.
      *              This causes the application to stall and not proceed any farther as there is no window for the user
      *              to return to.
@@ -95,9 +95,10 @@ public class AddPart {
 
     /**
      * Saves the part
+     *
      * @param event Saves the Part that the user is creating. Takes the ID, Name, Inventory, Min, and Max from the form
      *              and saves it. After the part is saved into memory, the user is then brought into the Main Window.
-     *
+     *              <p>
      *              Error checking happens if the user tries to enter in a Min amount that is greater then Max.
      *              Error checking happens if the user tries to enter in an Inv amount that is greater than Max.
      *              Error checking happens if the user does not fill in the form to completion alerting the user
@@ -112,6 +113,15 @@ public class AddPart {
             int stock = Integer.parseInt(txtPartInventory.getText());
             int min = Integer.parseInt(txtPartMin.getText());
             int max = Integer.parseInt(txtPartMax.getText());
+
+            //Error if Inv is Less then Zero
+            if (stock < 0) {
+                Alert minGreaterMax = new Alert(Alert.AlertType.ERROR);
+                minGreaterMax.setTitle("Error!");
+                minGreaterMax.setContentText("Inventory needs to be greater than 0.");
+                minGreaterMax.showAndWait();
+                return;
+            }
 
             //Error if Min is Greater then Max field
             if (min > max) {

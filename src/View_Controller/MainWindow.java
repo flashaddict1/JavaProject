@@ -342,7 +342,7 @@ public class MainWindow implements Initializable {
             Optional<ButtonType> result = alertConfirmDelete.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
                 Alert alertDelete = new Alert(Alert.AlertType.INFORMATION);
-                alertDelete.setContentText("Part has been deleted.");
+                alertDelete.setContentText("Product has been deleted.");
                 alertDelete.showAndWait();
                 deleteProduct(product.getId());
             }

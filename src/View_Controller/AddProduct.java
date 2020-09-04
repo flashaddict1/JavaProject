@@ -193,7 +193,7 @@ public class AddProduct implements Initializable {
             if (stock > max) {
                 Alert invGreaterMax = new Alert(Alert.AlertType.ERROR);
                 invGreaterMax.setTitle("Error!");
-                invGreaterMax.setContentText("Inventory Min needs to be smaller than Max");
+                invGreaterMax.setContentText("Inventory needs to be smaller than Max");
                 invGreaterMax.showAndWait();
                 return;
             }

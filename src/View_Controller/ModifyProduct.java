@@ -15,7 +15,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -223,6 +222,23 @@ public class ModifyProduct implements Initializable {
                     int productStock = Integer.parseInt(txtModProdInv.getText());
                     int productMax = Integer.parseInt(txtModProdMax.getText());
                     int productMin = Integer.parseInt(txtModProdMin.getText());
+
+                    //Error if Min is Greater then Max field
+                    if (productMin > productMax) {
+                        Alert minGreaterMax = new Alert(Alert.AlertType.ERROR);
+                        minGreaterMax.setTitle("Error!");
+                        minGreaterMax.setContentText("Quantity Min needs to be smaller than Max");
+                        minGreaterMax.showAndWait();
+                        return;
+                    }
+                    //Error if Inventory is Greater then Max Field
+                    if (productStock > productMax) {
+                        Alert invGreaterMax = new Alert(Alert.AlertType.ERROR);
+                        invGreaterMax.setTitle("Error!");
+                        invGreaterMax.setContentText("Inventory needs to be smaller than Max");
+                        invGreaterMax.showAndWait();
+                        return;
+                    }
 
                     // Set all updated data into Product
                     product.setName(productName);

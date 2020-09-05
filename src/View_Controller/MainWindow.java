@@ -19,20 +19,20 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-/**
+/** Form for Viewing and Deleting parts and products, contains buttons for Modifying and Adding new parts and products.
  * @author Sam Gonzales
  *
  * <p>
  * Error Exception
- * Put below and explained in detail on every location that an error can occur.
+ * <br>Put below and explained in detail on every location that an error can occur.
  * <p>
- * FUTURE IMPROVEMENTS
- * Should add functionallity to select more than one part at a time to modify in bulk
- * Should add functionallity to select more than one part at a time to delete in bulk
- * Should add functionallity to select more than one product at a time to modify in bulk
- * Should add functionallity to select more than one product at a time to delete in bulk
- * Should add the ability to have the search field update while the user is typing.
- * Adding in functionallty to see what parts that are assocaited with products live would benifit the user as well
+ * <br>FUTURE IMPROVEMENTS
+ * <br>Should add functionallity to select more than one part at a time to modify in bulk
+ * <br>Should add functionallity to select more than one part at a time to delete in bulk
+ * <br>Should add functionallity to select more than one product at a time to modify in bulk
+ * <br>Should add functionallity to select more than one product at a time to delete in bulk
+ * <br>Should add the ability to have the search field update while the user is typing.
+ * <br>Adding in functionallty to see what parts that are assocaited with products live would benifit the user as well
  * to let them see if they need to modify the item before going through the steps.
  */
 
@@ -75,6 +75,7 @@ public class MainWindow implements Initializable {
      * <p>
      * Error Exception happens if the Part menu does not exist or if the program is unable to open the Form up.
      * This causes the application to stall and not proceed any farther as there is no window for the user to return to.
+     * This is a fatal error.
      *
      * @param event Changes the Stage to Add Part Menu if unable to open Add Part Menu an alert pops up alerting the
      *              user that system was unable to open up the menu.
@@ -100,6 +101,7 @@ public class MainWindow implements Initializable {
      * <p>
      * Error Exception happens if the Product menu does not exist or if the program is unable to open the Form up.
      * This causes the application to stall and not proceed any farther as there is no window for the user to return to.
+     * This is a fatal error.
      *
      * @param event Changes the Stage to Add Product Menu if unable to open Add Part Menu an alert pops up alerting the
      *              user that system was unable to open up the menu.
@@ -122,6 +124,7 @@ public class MainWindow implements Initializable {
     /**
      * Opens Modify Part Menu and completes the form with the data selected
      * Error Exception happens when the does not select a part to modify
+     * User Must Select a part to Continue
      *
      * @param event Allows the user to select a part to add and changes the scene to the Modify Part Menu
      */
@@ -217,6 +220,7 @@ public class MainWindow implements Initializable {
      * Opens Modify Product Menu and completes the form with the data selected
      * <p>
      * Error Exception happens when the user tries to modify a part, but does not select one to modify.
+     * User must select a part to continue
      *
      * @param event Changes the stage to Modify Product Menu if the user has a part selected, if the user does not have
      *              a part selected an alert will alert the user to select the part before being able to proceed.
@@ -255,6 +259,7 @@ public class MainWindow implements Initializable {
      * if the user selects a part, an alert will appear asking user to confirm deletion.
      * <p>
      * Error Exception happens when a user tries to delete a part, but the program is unable to delete it.
+     * This is a fatal error. Part does not exist in the database.
      */
     @FXML
     void onActionDeletePart() {
@@ -288,6 +293,7 @@ public class MainWindow implements Initializable {
      * Delete Selected Part from the database
      * <p>
      * Error Exception happens when the user tries to delete a part, but the part is not selected.
+     * User must select a part to proceed.
      *
      * @param id Deletes the part by the id that is supplied in the onActionDeletePart.
      */
@@ -295,13 +301,17 @@ public class MainWindow implements Initializable {
         for (Part Part : Inventory.getAllParts()) {
             if (Part.getId() == id) {
                 Part selectedPart = tblViewPart.getSelectionModel().getSelectedItem();
-                if (selectedPart != null) {
+                if (selectedPart == null) {
                     Alert deletePartAlert = new Alert(Alert.AlertType.NONE);
                     deletePartAlert.setAlertType(Alert.AlertType.ERROR);
                     deletePartAlert.setContentText("Error unable delete part because it doesn't exist");
                     deletePartAlert.show();
                 } else {
                     Inventory.getAllParts().remove(Part);
+                    Alert partDeleted = new Alert(Alert.AlertType.NONE);
+                    partDeleted.setAlertType(Alert.AlertType.INFORMATION);
+                    partDeleted.setContentText("Part " + Part.getName() + " has been deleted!");
+                    partDeleted.show();
                 }
                 return;
             }
@@ -313,8 +323,8 @@ public class MainWindow implements Initializable {
      * if the user selects a Product, an alert will appear asking user to confirm deletion.
      * <p>
      * Error Exception happens when a user tries to delete a part, but the program is unable to delete it.
-     * If a user tries to delete a product that has an association with a part it will return an error notifing the
-     * user that they must remove the assocaition first.
+     * If a user tries to delete a product that has an association with a part it will return an error
+     * User must remove part association before proceeding.
      */
     @FXML
     void onActionDeleteProduct() {
@@ -341,10 +351,10 @@ public class MainWindow implements Initializable {
             alertConfirmDelete.setContentText("Are you sure you want to DELETE?");
             Optional<ButtonType> result = alertConfirmDelete.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                Alert alertDelete = new Alert(Alert.AlertType.INFORMATION);
-                alertDelete.setContentText("Product has been deleted.");
-                alertDelete.showAndWait();
-                deleteProduct(product.getId());
+                Alert partDeleted = new Alert(Alert.AlertType.NONE);
+                partDeleted.setAlertType(Alert.AlertType.INFORMATION);
+                partDeleted.setContentText("Part " + product.getName() + " has been deleted!");
+                partDeleted.show();
             }
         }
     }
@@ -353,6 +363,7 @@ public class MainWindow implements Initializable {
      * Delete Selected Product from the database
      * <p>
      * Error Exception happens when the user tries to delete a Product, but the Product is not selected.
+     * User must select a part first.
      *
      * @param id Deletes the Product by the id that is supplied in the onActionDeleteProduct.
      */

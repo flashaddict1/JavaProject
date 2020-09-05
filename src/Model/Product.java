@@ -3,12 +3,12 @@ package Model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-/**
+/** Sets the Product parameters
  * Contains the  Construct, Getters and Setters creating the basis for Products
  * <p>
- * The form contains the getters, setters for creation of Product. The form also has Constructors used to define the
+ * <br>The form contains the getters, setters for creation of Product. The form also has Constructors used to define the
  * parameters on which a product is made out of.
- * Product Constructor is created from ID, Name, Price, Stock (Inventory Amount ), Min and Max values to dictate how
+ * <br>Product Constructor is created from ID, Name, Price, Stock (Inventory Amount ), Min and Max values to dictate how
  * many items can be entered.
  *
  * @author Sam

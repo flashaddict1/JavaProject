@@ -4,9 +4,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
- * Contains getter, setters
- * <p>
  * Contains modules for Getter, Setter, Lookup Part, and Update Parts
+ * <p>
  *
  * @author Sam Gonzales
  */

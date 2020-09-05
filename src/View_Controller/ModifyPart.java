@@ -11,22 +11,21 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
-/**
+/** Form for Modifying a part
  * @author Sam Gonzales
- *
  * <p>
  * RUNTIME ERRORS
- * Put below and explained in detail on every location that an error can occur.
- * <p>
- * FUTURE IMPROVEMENTS
- * Should combine the Add Part and Modify parts menus making for a streamlined experience and shrinking the size of the
+ * <br>Put below and explained in detail on every location that an error can occur.
+ *
+ * <br>FUTURE IMPROVEMENTS<br>
+ * <br>Should combine the Add Part and Modify parts menus making for a streamlined experience and shrinking the size of the
  * overall program.
- * The ability to Modify multiple parts at once
- * The ability to view all parts currently existing
- * Drop Down menu for the machine code already added to add more that match.
- * Drop down menu for companies already added to quickly add more.
- * Live editing that will not allow the user to type anything in the inventory field that is larger than Max
- * Live editing that will not allow for the user to type anything in the Min field that is larger than Max
+ * <br>The ability to add multiple parts at once
+ * <br>The ability to view all parts currently existing
+ * <br>Drop Down menu for the machine code already added to add more that match.
+ * <br>Drop down menu for companies already added to quickly add more.
+ * <br>Live editing that will not allow the user to type anything in the inventory field that is larger than Max
+ * <br>Live editing that will not allow for the user to type anything in the Min field that is larger than Max</p>
  */
 
 public class ModifyPart {
@@ -62,6 +61,7 @@ public class ModifyPart {
      *              Error Exception happens when the Main window is not able to be loaded.
      *              This causes the application to stall and not proceed any farther as there is no window for the user
      *              to return to.
+     *              This is a fatal error.
      */
     public void onActionCancelModifyPart(javafx.event.ActionEvent event) {
         try {
@@ -74,7 +74,7 @@ public class ModifyPart {
             Alert ModifyPartAlert = new Alert(Alert.AlertType.NONE);
             ModifyPartAlert.setAlertType(Alert.AlertType.ERROR);
             ModifyPartAlert.setContentText("Unable to find the Main Window");
-            ModifyPartAlert.show();
+            ModifyPartAlert.showAndWait();
         }
     }
 
@@ -122,6 +122,7 @@ public class ModifyPart {
      *              Error checking happens if the user tries to enter in an Inv amount that is greater than Max.
      *              Error checking happens if the user does not fill in the form to completion alerting the user
      *              to finish editing the form.
+     *              All errors alert the user to correct the form before continuing.
      */
     @FXML
     public void onActionSavePart(javafx.event.ActionEvent event) {
@@ -218,8 +219,8 @@ public class ModifyPart {
         } catch (Exception addPartError) {
             Alert addPartAlert = new Alert(Alert.AlertType.NONE);
             addPartAlert.setAlertType(Alert.AlertType.ERROR);
-            addPartAlert.setContentText("Unable to Modify the part, Use Alphanumeric Characters only!");
-            addPartAlert.show();
+            addPartAlert.setContentText("Form must be filled out completely!");
+            addPartAlert.showAndWait();
         }
     }
 

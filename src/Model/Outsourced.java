@@ -1,10 +1,10 @@
 package Model;
 
-/**
+/** Sets the Outsourced part parameters
  * Contains the Constructor for Outsourced Parts
  * <p>
- * Contains the Getter for Outsourced Parts. Also contains the Constructor for Outsourced Parts.
- * Constructor is made from, Name, ID, Price, Stock ( Inventory ), Min and Max values to dictate how many items can be entered.
+ * <br>Contains the Getter for Outsourced Parts. Also contains the Constructor for Outsourced Parts.
+ * <br>Constructor is made from, Name, ID, Price, Stock ( Inventory ), Min and Max values to dictate how many items can be entered.
  *
  * @author Sam Gonzales
  */

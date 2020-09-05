@@ -1,10 +1,10 @@
 package Model;
 
-/**
+/** Sets the InHouse part parameters
  * Contains the Constructor for InHouse Parts
  * <p>
  * Contains the Getter for InHouse Parts. Also contains the Constructor for InHouse Parts.
- * Constructor is made from, Name, ID, Price, Stock ( Inventory ), Min and Max values to dictate how many items can be entered.
+ * <br>Constructor is made from, Name, ID, Price, Stock ( Inventory ), Min and Max values to dictate how many items can be entered.
  *
  * @author Sam Gonzales
  */

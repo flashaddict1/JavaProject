@@ -20,29 +20,29 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-/**
+/** Form for creating a new Product
  * @author Sam Gonzales
  *
  * <p>
  * Runtime Errors
- * Put below and explained in detail on every location that an error can occur.
+ * <br>Put below and explained in detail on every location that an error can occur.
  * <p>
- * FUTURE IMPROVEMENTS
- * Should combine the Add Product and Modify Product menus making for a streamlined experience and shrinking the size of the
+ * <br>FUTURE IMPROVEMENTS
+ * <br>Should combine the Add Product and Modify Product menus making for a streamlined experience and shrinking the size of the
  * overall program.
- * The ability to add multiple parts at once
- * The ability to view all parts currently existing
- * Drop Down menu for the machine code already added to add more that match.
- * Drop down menu for companies already added to quickly add more.
- * Live editing that will not allow the user to type anything in the inventory field that is larger than Max
- * Live editing that will not allow for the user to type anything in the Min field that is larger than Max
- * Search field on the top can be updated to allow for instant results as the user is typing instead of what currently
- * happens as the user currently has to push enter to search.
- * Allowing the user to select multiple parts to add into the association at once will be benifical when the list has
+ * <br>The ability to add multiple parts at once
+ * <br>The ability to view all parts currently existing
+ * <br>Drop Down menu for the machine code already added to add more that match.
+ * <br>Drop down menu for companies already added to quickly add more.
+ * <br>Live editing that will not allow the user to type anything in the inventory field that is larger than Max
+ * <br>Live editing that will not allow for the user to type anything in the Min field that is larger than Max
+ * <br>Search field on the top can be updated to allow for instant results as the user is typing instead of what currently
+ * <br>happens as the user currently has to push enter to search.
+ * <br>Allowing the user to select multiple parts to add into the association at once will be benifical when the list has
  * a large number of parts for the user to go through.
- * Allowing the user to select multiple parts to unassociate at once will be benifical to the user when there is a large
+ * <br>Allowing the user to select multiple parts to unassociate at once will be benifical to the user when there is a large
  * number of items that are associated.
- * Allowing the user to remove the assocaition of all parts will help out as well if the user doesn't need any of the
+ * <br>Allowing the user to remove the assocaition of all parts will help out as well if the user doesn't need any of the
  * associations.
  */
 
@@ -89,6 +89,7 @@ public class AddProduct implements Initializable {
      *              Error Exception happens when the Main window is not able to be loaded.
      *              This causes the application to stall and not proceed any farther as there is no window for the user
      *              to return to.
+     *              This is a fatal error.
      */
     public void onActionProductCancel(javafx.event.ActionEvent event) {
         try {
@@ -137,6 +138,7 @@ public class AddProduct implements Initializable {
      * that they would like the remove the association.
      * <p>
      * Error Exception happens if the user tries to remove the association if there was no association to begin with.
+     * User must remove all part associations before proceeding.
      */
     @FXML
     void onActionDeletePart() {
@@ -165,8 +167,8 @@ public class AddProduct implements Initializable {
      *              <p>
      *              Error checking happens if the user tries to enter in a Min amount that is greater then Max.
      *              Error checking happens if the user tries to enter in an Inv amount that is greater than Max.
-     *              Error checking happens if the user does not fill in the form to completion alerting the user
-     *              to finish editing the form.
+     *              Error checking happens if the user does not fill in the form to completion
+     *              All errors alert the user to correct the form before continuing.
      */
     @FXML
     void onActionSaveProduct(javafx.event.ActionEvent event) {
@@ -229,6 +231,7 @@ public class AddProduct implements Initializable {
      * <p>
      * Error Exception happens if the user tries to add a part that does not exist in the database
      * this will then Alert the user if unable to add part to association
+     * This is a fatal error.
      */
     @FXML
     void onActionAddPart() {

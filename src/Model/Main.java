@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 /**
  * Creates the stage for Main window
  * <p>
- * Sets the resolution for the program. Creates a few parts to be filled in automatically so the program can be tested.
+ * <br>Sets the resolution for the program. Creates a few parts to be filled in automatically so the program can be tested.
  * @author Sam Gonzales
  */
 

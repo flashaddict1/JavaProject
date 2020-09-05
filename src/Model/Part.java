@@ -1,11 +1,11 @@
 package Model;
 
-/**
+/** Sets the part parameters
  * Contains the Construct, Getters and Setters creating the basis for Parts
  * <p>
  * The form contains the getters, setters for creation of Parts. The form also has Constructors used to define the
  * parameters on which a Parts is made out of.
- * Parts Constructor is created from ID, Name, Price, Stock (Inventory Amount ), Min and Max values to dictate how
+ * <br>Parts Constructor is created from ID, Name, Price, Stock (Inventory Amount ), Min and Max values to dictate how
  * many items can be entered.
  *
  * @author Sam

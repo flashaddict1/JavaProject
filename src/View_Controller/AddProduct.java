@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -20,7 +21,9 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-/** Form for creating a new Product
+/**
+ * Form for creating a new Product
+ *
  * @author Sam Gonzales
  *
  * <p>
@@ -93,18 +96,12 @@ public class AddProduct implements Initializable {
      */
     public void onActionProductCancel(javafx.event.ActionEvent event) {
         try {
-            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            Object scene = FXMLLoader.load(getClass().getResource("../View_Controller/MainWindow.fxml"));
-            stage.setTitle("Inventory Management System");
-            stage.setScene(new Scene((Parent) scene));
-            stage.show();
+            changeWindow(event);
         } catch (Exception invalidWindowLink) {
-            Alert invalidWindow = new Alert(Alert.AlertType.NONE);
-            invalidWindow.setAlertType(Alert.AlertType.ERROR);
-            invalidWindow.setContentText("Unable to find the Main Window");
-            invalidWindow.show();
+            alertMessage("Unable to find the Main Window");
         }
     }
+
 
     private final ObservableList<Part> addedParts = FXCollections.observableArrayList();
     FilteredList<Part> filteredPartsData = new FilteredList<>(Inventory.getAllParts(), p -> true);
@@ -119,15 +116,7 @@ public class AddProduct implements Initializable {
      */
     @FXML
     void onActionSearchProduct() {
-        filteredPartsData.setPredicate(part -> {
-            if (txtProdSearch.getText().equals("")) {
-                return true;
-            }
-            String lowerCaseFilter = txtProdSearch.getText().toLowerCase();
-            if (part.getName().toLowerCase().contains(lowerCaseFilter)) {
-                return true;
-            } else return Integer.toString(part.getId()).contains(lowerCaseFilter);
-        });
+        filteredPartsData.setPredicate(this::test);
         SortedList<Part> sortedPartsData = new SortedList<>(filteredPartsData);
         sortedPartsData.comparatorProperty().bind(tblViewProduct1.comparatorProperty());
         tblViewProduct1.setItems(sortedPartsData);
@@ -150,12 +139,11 @@ public class AddProduct implements Initializable {
             if (selectedPart != null) {
                 addedParts.remove(selectedPart);
                 System.out.println("Removed association!");
-            } else {
-                Alert errorDelete = new Alert(Alert.AlertType.ERROR);
-                errorDelete.setTitle("Error!");
-                errorDelete.setContentText("There is no part association.");
-                errorDelete.showAndWait();
             }
+            Alert errorDelete = new Alert(Alert.AlertType.ERROR);
+            errorDelete.setTitle("Error!");
+            errorDelete.setContentText("There is no part association.");
+            errorDelete.showAndWait();
         }
     }
 
@@ -212,19 +200,13 @@ public class AddProduct implements Initializable {
 
             //Return to Main Window
             Inventory.addProduct(newProduct);
-            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            Object scene = FXMLLoader.load(getClass().getResource("../View_Controller/MainWindow.fxml"));
-            stage.setTitle("Inventory Management System");
-            stage.setScene(new Scene((Parent) scene));
-            stage.show();
+            changeWindow(event);
 
         } catch (Exception invalidCharError) {
-            Alert invalidCharAlert = new Alert(Alert.AlertType.NONE);
-            invalidCharAlert.setAlertType(Alert.AlertType.ERROR);
-            invalidCharAlert.setContentText("Invalid Character! Part must only contain AlphaNumeric characters!");
-            invalidCharAlert.show();
+            alertMessage("Invalid Character! Part must only contain AlphaNumeric characters!");
         }
     }
+
 
     /**
      * Creates associations with the part being created.
@@ -238,12 +220,8 @@ public class AddProduct implements Initializable {
         Part selectedPart = tblViewProduct1.getSelectionModel().getSelectedItem();
         if (selectedPart != null) {
             addedParts.add(selectedPart);
-        } else {
-            Alert assPartAlert = new Alert(Alert.AlertType.NONE);
-            assPartAlert.setAlertType(Alert.AlertType.ERROR);
-            assPartAlert.setContentText("Error unable to associate part");
-            assPartAlert.show();
         }
+        alertMessage("Error unable to associate part");
     }
 
     /**
@@ -269,6 +247,29 @@ public class AddProduct implements Initializable {
         tblColProdName2.setCellValueFactory(new PropertyValueFactory<>("name"));
         tblColProdCost2.setCellValueFactory(new PropertyValueFactory<>("price"));
         tblColProdInvLvl2.setCellValueFactory(new PropertyValueFactory<>("stock"));
+    }
+
+    private void alertMessage(String s) {
+        Alert invalidCharAlert = new Alert(Alert.AlertType.NONE);
+        invalidCharAlert.setAlertType(Alert.AlertType.ERROR);
+        invalidCharAlert.setContentText(s);
+        invalidCharAlert.show();
+    }
+
+    private void changeWindow(ActionEvent event) throws java.io.IOException {
+        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        Object scene = FXMLLoader.load(getClass().getResource("../View_Controller/MainWindow.fxml"));
+        stage.setTitle("Inventory Management System");
+        stage.setScene(new Scene((Parent) scene));
+        stage.show();
+    }
+
+    private boolean test(Part part) {
+        if (txtProdSearch.getText().equals("")) {
+            return true;
+        }
+        String lowerCaseFilter = txtProdSearch.getText().toLowerCase();
+        return part.getName().toLowerCase().contains(lowerCaseFilter) || Integer.toString(part.getId()).contains(lowerCaseFilter);
     }
 }
 

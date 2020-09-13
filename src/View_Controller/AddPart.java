@@ -3,6 +3,7 @@ package View_Controller;
 import Model.InHouse;
 import Model.Inventory;
 import Model.Outsourced;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -55,10 +56,7 @@ public class AddPart {
      */
     @FXML
     public void SetMachineLbl() {
-        if (rdbOutsourced.isSelected())
-            this.lblMachineText.setText("Company Name");
-        else
-            this.lblMachineText.setText("MachineID");
+        this.lblMachineText.setText(rdbOutsourced.isSelected() ? "Company Name" : "MachineID");
     }
 
     /**
@@ -79,18 +77,14 @@ public class AddPart {
             confirmDelete.setContentText("Are you sure you want to quit adding a part");
             Optional<ButtonType> result = confirmDelete.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-                scene = FXMLLoader.load(getClass().getResource("../View_Controller/MainWindow.fxml"));
-                stage.setScene(new Scene(scene));
-                stage.show();
+                returnToMain(event);
             }
         } catch (Exception windowNotFound) {
-            Alert lostMain = new Alert(Alert.AlertType.NONE);
-            lostMain.setAlertType(Alert.AlertType.ERROR);
-            lostMain.setContentText("Unable to find the Main Window Form.");
-            lostMain.show();
+            filledOutForm("Unable to find the Main Window Form.");
         }
     }
+
+
 
     /**
      * Saves the part
@@ -115,27 +109,18 @@ public class AddPart {
 
             //Error if Inv is Less then Zero
             if (stock < 0) {
-                Alert minGreaterMax = new Alert(Alert.AlertType.ERROR);
-                minGreaterMax.setTitle("Error!");
-                minGreaterMax.setContentText("Inventory needs to be greater than 0.");
-                minGreaterMax.showAndWait();
+                alertMethod("Inventory needs to be greater than 0.");
                 return;
             }
 
             //Error if Min is Greater then Max field
             if (min > max) {
-                Alert minGreaterMax = new Alert(Alert.AlertType.ERROR);
-                minGreaterMax.setTitle("Error!");
-                minGreaterMax.setContentText("Quantity Min needs to be smaller than Max");
-                minGreaterMax.showAndWait();
+                alertMethod("Quantity Min needs to be smaller than Max");
                 return;
             }
             //Error if Inventory is Greater then Max Field
             if (stock > max) {
-                Alert invGreaterMax = new Alert(Alert.AlertType.ERROR);
-                invGreaterMax.setTitle("Error!");
-                invGreaterMax.setContentText("Inventory needs to be smaller than Max");
-                invGreaterMax.showAndWait();
+                alertMethod("Inventory needs to be smaller than Max");
                 return;
             }
 
@@ -143,22 +128,36 @@ public class AddPart {
             if (rdbOutsourced.isSelected()) {
                 String companyName = txtPartMachineCompanyID.getText();
                 Inventory.addPart(new Outsourced(name, id, price, stock, min, max, companyName));
-            } else {
-                int machineId = Integer.parseInt(txtPartMachineCompanyID.getText());
-                Inventory.addPart(new InHouse(name, id, price, stock, min, max, machineId));
             }
+            int machineId = Integer.parseInt(txtPartMachineCompanyID.getText());
+            Inventory.addPart(new InHouse(name, id, price, stock, min, max, machineId));
 
             //Returns to Main Window
-            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            scene = FXMLLoader.load(getClass().getResource("../View_Controller/MainWindow.fxml"));
-            stage.setScene(new Scene(scene));
-            stage.show();
+            returnToMain(event);
         } catch (Exception incompleteForm) {
-            Alert formIncomplete = new Alert(Alert.AlertType.NONE);
-            formIncomplete.setAlertType(Alert.AlertType.ERROR);
-            formIncomplete.setContentText("Form must be filled out completely!");
-            formIncomplete.show();
+            filledOutForm("Form must be filled out completely!");
         }
+    }
+
+    private void alertMethod(String s) {
+        Alert minGreaterMax = new Alert(Alert.AlertType.ERROR);
+        minGreaterMax.setTitle("Error!");
+        minGreaterMax.setContentText(s);
+        minGreaterMax.showAndWait();
+    }
+
+    private void filledOutForm(String s) {
+        Alert formIncomplete = new Alert(Alert.AlertType.NONE);
+        formIncomplete.setAlertType(Alert.AlertType.ERROR);
+        formIncomplete.setContentText(s);
+        formIncomplete.show();
+    }
+
+    private void returnToMain(ActionEvent event) throws java.io.IOException {
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("../View_Controller/MainWindow.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
     }
 }
 

@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,7 +16,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
-
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -102,16 +102,9 @@ public class ModifyProduct implements Initializable {
      */
     public void ModifyProductCancel(javafx.event.ActionEvent event) {
         try {
-            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            Object scene = FXMLLoader.load(getClass().getResource("../View_Controller/MainWindow.fxml"));
-            stage.setTitle("Inventory Management System");
-            stage.setScene(new Scene((Parent) scene));
-            stage.show();
+            switchWindow(event);
         } catch (Exception modifyCancelError) {
-            Alert modifyCancelAlert = new Alert(Alert.AlertType.NONE);
-            modifyCancelAlert.setAlertType(Alert.AlertType.ERROR);
-            modifyCancelAlert.setContentText("Unable to find the Main Window");
-            modifyCancelAlert.show();
+            alertWindow("Unable to find the Main Window");
         }
     }
 
@@ -123,7 +116,7 @@ public class ModifyProduct implements Initializable {
      */
     public void selectedProduct(int id) {
         ObservableList<Product> allProductData = Inventory.getAllProducts();
-        allProductData.forEach(product -> {
+        for (Product product : allProductData) {
             if (product.getId() == id) {
                 // Insert data into text field depending on id selected
                 txtModProdId.setText(Integer.toString(product.getId()));
@@ -134,7 +127,7 @@ public class ModifyProduct implements Initializable {
                 txtModProdMin.setText(Integer.toString(product.getMin()));
                 addedParts.addAll(product.getAllAssociatedParts());
             }
-        });
+        }
     }
 
     /**
@@ -147,15 +140,7 @@ public class ModifyProduct implements Initializable {
      */
     @FXML
     void onActionSearchProduct() {
-        filteredPartsData.setPredicate(part -> {
-            if (txtProdSearch.getText().equals("")) {
-                return true;
-            }
-            String lowerCaseFilter = txtProdSearch.getText().toLowerCase();
-            if (part.getName().toLowerCase().contains(lowerCaseFilter)) {
-                return true;
-            } else return Integer.toString(part.getId()).contains(lowerCaseFilter);
-        });
+        filteredPartsData.setPredicate(this::test);
         SortedList<Part> sortedPartsData = new SortedList<>(filteredPartsData);
         sortedPartsData.comparatorProperty().bind(tblViewProduct1.comparatorProperty());
         tblViewProduct1.setItems(sortedPartsData);
@@ -171,12 +156,8 @@ public class ModifyProduct implements Initializable {
         Part selectedPart = tblViewProduct1.getSelectionModel().getSelectedItem();
         if (selectedPart != null) {
             addedParts.add(selectedPart);
-        } else {
-            Alert addPartAlert = new Alert(Alert.AlertType.NONE);
-            addPartAlert.setAlertType(Alert.AlertType.ERROR);
-            addPartAlert.setContentText("No Part Selected to add.");
-            addPartAlert.show();
         }
+        alertWindow("No Part Selected to add.");
     }
 
     /**
@@ -195,12 +176,8 @@ public class ModifyProduct implements Initializable {
             if (selectedPart != null) {
                 addedParts.remove(selectedPart);
                 System.out.println("Removed association!");
-            } else {
-                Alert removeAssAlert = new Alert(Alert.AlertType.NONE);
-                removeAssAlert.setAlertType(Alert.AlertType.ERROR);
-                removeAssAlert.setContentText("You must select a part to remove from association.");
-                removeAssAlert.show();
             }
+            alertWindow("You must select a part to remove from association.");
         }
     }
 
@@ -219,66 +196,21 @@ public class ModifyProduct implements Initializable {
     public void onActionSaveProduct(javafx.event.ActionEvent event) {
         try {
             ObservableList<Product> allProductsData = Inventory.getAllProducts();
-            allProductsData.forEach(product -> {
-                if (product.getId() == Integer.parseInt(txtModProdId.getText())) {
-                    String productName = txtModProdName.getText();
-                    double productPrice = Double.parseDouble(txtModProdPrice.getText());
-                    int productStock = Integer.parseInt(txtModProdInv.getText());
-                    int productMax = Integer.parseInt(txtModProdMax.getText());
-                    int productMin = Integer.parseInt(txtModProdMin.getText());
-
-                    //Error if Inv is Less then Zero
-                    if (productStock < 0) {
-                        Alert minGreaterMax = new Alert(Alert.AlertType.ERROR);
-                        minGreaterMax.setTitle("Error!");
-                        minGreaterMax.setContentText("Inventory needs to be greater than 0.");
-                        minGreaterMax.showAndWait();
-                        return;
-                    }
-
-                    //Error if Min is Greater then Max field
-                    if (productMin > productMax) {
-                        Alert minGreaterMax = new Alert(Alert.AlertType.ERROR);
-                        minGreaterMax.setTitle("Error!");
-                        minGreaterMax.setContentText("Quantity Min needs to be smaller than Max");
-                        minGreaterMax.showAndWait();
-                        return;
-                    }
-                    //Error if Inventory is Greater then Max Field
-                    if (productStock > productMax) {
-                        Alert invGreaterMax = new Alert(Alert.AlertType.ERROR);
-                        invGreaterMax.setTitle("Error!");
-                        invGreaterMax.setContentText("Inventory needs to be smaller than Max");
-                        invGreaterMax.showAndWait();
-                        return;
-                    }
-
-                    // Set all updated data into Product
-                    product.setName(productName);
-                    product.setPrice(productPrice);
-                    product.setStock(productStock);
-                    product.setMax(productMax);
-                    product.setMin(productMin);
-
-                    // Clear out the associated parts list in the product
-                    product.deleteAllAssociatedParts();
-
-                    // Add parts to Product Group
-                    addedParts.forEach(product::addAssociatedPart);
-                }
-            });
+            //Error if Inv is Less then Zero
+            //Error if Min is Greater then Max field
+            //Error if Inventory is Greater then Max Field
+            // Set all updated data into Product
+            // Clear out the associated parts list in the product
+            // Add parts to Product Group
+            allProductsData.stream()
+                    .filter(product -> product.getId() ==
+                            Integer.parseInt(txtModProdId.getText()))
+                    .forEachOrdered(this::accept);
 
             //Returns to Main Window
-            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            Object scene = FXMLLoader.load(getClass().getResource("../View_Controller/MainWindow.fxml"));
-            stage.setTitle("Inventory Management System");
-            stage.setScene(new Scene((Parent) scene));
-            stage.show();
+            switchWindow(event);
         } catch (Exception modifyProductError) {
-            Alert modifyProductAlert = new Alert(Alert.AlertType.NONE);
-            modifyProductAlert.setAlertType(Alert.AlertType.ERROR);
-            modifyProductAlert.setContentText("Unable to Modify the Product, Use Alphanumeric Characters only!");
-            modifyProductAlert.show();
+            alertWindow("Unable to Modify the Product, Use Alphanumeric Characters only!");
         }
     }
 
@@ -307,12 +239,59 @@ public class ModifyProduct implements Initializable {
             tblColProdCost2.setCellValueFactory(new PropertyValueFactory<>("price"));
             tblColProdInvLvl2.setCellValueFactory(new PropertyValueFactory<>("stock"));
         } catch (Exception UnableToLoadError) {
-            Alert UnableToLoadAlert = new Alert(Alert.AlertType.NONE);
-            UnableToLoadAlert.setAlertType(Alert.AlertType.ERROR);
-            UnableToLoadAlert.setContentText("Unable to load the table view!");
-            UnableToLoadAlert.show();
+            alertWindow("Unable to load the table view!");
         }
     }
+
+    private void alertWindow(String s) {
+        Alert modifyProductAlert = new Alert(Alert.AlertType.NONE);
+        modifyProductAlert.setAlertType(Alert.AlertType.ERROR);
+        modifyProductAlert.setContentText(s);
+        modifyProductAlert.show();
+    }
+
+    private void switchWindow(ActionEvent event) throws java.io.IOException {
+        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        Object scene = FXMLLoader.load(getClass().getResource("../View_Controller/MainWindow.fxml"));
+        stage.setTitle("Inventory Management System");
+        stage.setScene(new Scene((Parent) scene));
+        stage.show();
+    }
+
+    private boolean test(Part part) {
+        if (txtProdSearch.getText().equals("")) {
+            return true;
+        }
+        String lowerCaseFilter = txtProdSearch.getText().toLowerCase();
+        if (part.getName().toLowerCase().contains(lowerCaseFilter)) {
+            return true;
+        } else return Integer.toString(part.getId()).contains(lowerCaseFilter);
+    }
+
+    private void accept(Product product) {
+        String productName = txtModProdName.getText();
+        double productPrice = Double.parseDouble(txtModProdPrice.getText());
+        int productStock = Integer.parseInt(txtModProdInv.getText());
+        int productMax = Integer.parseInt(txtModProdMax.getText());
+        int productMin = Integer.parseInt(txtModProdMin.getText());
+        if (productStock < 0) {
+            alertWindow("Inventory needs to be greater than 0.");
+            return;
+        }
+        if (productMin > productMax) {
+            alertWindow("Quantity Min needs to be smaller than Max");
+            return;
+        }
+        if (productStock > productMax) {
+            alertWindow("Inventory needs to be smaller than Max");
+            return;
+        }
+        product.setName(productName);
+        product.setPrice(productPrice);
+        product.setStock(productStock);
+        product.setMax(productMax);
+        product.setMin(productMin);
+        product.deleteAllAssociatedParts();
+        addedParts.forEach(product::addAssociatedPart);
+    }
 }
-
-

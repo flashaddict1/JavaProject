@@ -58,12 +58,7 @@ public class Inventory {
      * @return Returns the Part
      */
     public static int lookupPartIndex(int inputID) {
-        for (Part lookupPart : allParts) {
-            if (lookupPart.getId() == inputID) {
-                return allParts.indexOf(lookupPart);
-            }
-        }
-        return -1;
+        return allParts.stream().filter(lookupPart -> lookupPart.getId() == inputID).findFirst().map(allParts::indexOf).orElse(-1);
     }
 
     /**

@@ -4,6 +4,7 @@ import Model.InHouse;
 import Model.Inventory;
 import Model.Outsourced;
 import Model.Part;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -65,18 +66,13 @@ public class ModifyPart {
      */
     public void onActionCancelModifyPart(javafx.event.ActionEvent event) {
         try {
-            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            Object scene = FXMLLoader.load(getClass().getResource("../View_Controller/MainWindow.fxml"));
-            stage.setTitle("Inventory Management System");
-            stage.setScene(new Scene((Parent) scene));
-            stage.show();
+            switchWindows(event);
         } catch (Exception modifyPartError) {
-            Alert ModifyPartAlert = new Alert(Alert.AlertType.NONE);
-            ModifyPartAlert.setAlertType(Alert.AlertType.ERROR);
-            ModifyPartAlert.setContentText("Unable to find the Main Window");
-            ModifyPartAlert.showAndWait();
+            alertWindow("Unable to find the Main Window");
         }
     }
+
+
 
     /**
      * Set Label to either MachineID or Company Name
@@ -145,37 +141,24 @@ public class ModifyPart {
 
                 //Error if Inv is Less then Zero
                 if (invMax < 0) {
-                    Alert minGreaterMax = new Alert(Alert.AlertType.ERROR);
-                    minGreaterMax.setTitle("Error!");
-                    minGreaterMax.setContentText("Inventory needs to be greater than 0.");
-                    minGreaterMax.showAndWait();
+                    alertWindow("Inventory needs to be greater than 0.");
                     return;
                 }
 
                 //Error if Min is Greater then Max field
                 if (min > max) {
-                    Alert minGreaterMax = new Alert(Alert.AlertType.ERROR);
-                    minGreaterMax.setTitle("Error!");
-                    minGreaterMax.setContentText("Quantity Min needs to be smaller than Max");
-                    minGreaterMax.showAndWait();
+                    alertWindow("Quantity Min needs to be smaller than Max");
                     return;
                 }
                 //Error if Inventory is Greater then Max Field
                 if (invMax > max) {
-                    Alert InvGreaterMax = new Alert(Alert.AlertType.ERROR);
-                    InvGreaterMax.setTitle("Error!");
-                    InvGreaterMax.setContentText("Inventory needs to be smaller than Max");
-                    InvGreaterMax.showAndWait();
+                    alertWindow("Inventory needs to be smaller than Max");
                     return;
                 }
 
                 //Returns to Main Window
                 Inventory.updatePart(modifiedPart, newPart);
-                Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-                Object scene = FXMLLoader.load(getClass().getResource("../View_Controller/MainWindow.fxml"));
-                stage.setTitle("Inventory Management System");
-                stage.setScene(new Scene((Parent) scene));
-                stage.show();
+                switchWindows(event);
             } else if (rdbOutsourced.isSelected()) {
                 int max = Integer.parseInt(txtModPartMax.getText());
                 int min = Integer.parseInt(txtModPartMin.getText());
@@ -193,35 +176,37 @@ public class ModifyPart {
 
                 //Error if Min is Greater then Max field
                 if (min > max) {
-                    Alert minGreaterMax = new Alert(Alert.AlertType.ERROR);
-                    minGreaterMax.setTitle("Error!");
-                    minGreaterMax.setContentText("Quantity Min needs to be smaller than Max");
-                    minGreaterMax.showAndWait();
+                    alertWindow("Quantity Min needs to be smaller than Max");
                     return;
                 }
                 //Error if Inventory is Greater then Max Field
                 if (invMax > max) {
-                    Alert InvGreaterMax = new Alert(Alert.AlertType.ERROR);
-                    InvGreaterMax.setTitle("Error!");
-                    InvGreaterMax.setContentText("Inventory needs to be smaller than Max");
-                    InvGreaterMax.showAndWait();
+                    alertWindow("Inventory needs to be smaller than Max");
                     return;
                 }
 
                 //Returns to Main Window
                 Inventory.updatePart(moddedPart, newPart);
-                Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-                Object scene = FXMLLoader.load(getClass().getResource("../View_Controller/MainWindow.fxml"));
-                stage.setTitle("Inventory Management System");
-                stage.setScene(new Scene((Parent) scene));
-                stage.show();
+                switchWindows(event);
             }
         } catch (Exception addPartError) {
-            Alert addPartAlert = new Alert(Alert.AlertType.NONE);
-            addPartAlert.setAlertType(Alert.AlertType.ERROR);
-            addPartAlert.setContentText("Form must be filled out completely!");
-            addPartAlert.showAndWait();
+            alertWindow("Form must be filled out completely!");
         }
+    }
+
+    private void alertWindow(String s) {
+        Alert addPartAlert = new Alert(Alert.AlertType.NONE);
+        addPartAlert.setAlertType(Alert.AlertType.ERROR);
+        addPartAlert.setContentText(s);
+        addPartAlert.showAndWait();
+    }
+
+    private void switchWindows(ActionEvent event) throws java.io.IOException {
+        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        Object scene = FXMLLoader.load(getClass().getResource("../View_Controller/MainWindow.fxml"));
+        stage.setTitle("Main Window");
+        stage.setScene(new Scene((Parent) scene));
+        stage.show();
     }
 
 }

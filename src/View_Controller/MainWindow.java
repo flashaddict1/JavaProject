@@ -1,6 +1,7 @@
 package View_Controller;
 
 import Model.*;
+import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
@@ -38,12 +39,8 @@ import java.util.ResourceBundle;
 
 public class MainWindow implements Initializable {
 
-    Stage stage;
-    Parent scene;
-
     FilteredList<Part> filteredPartsData = new FilteredList<>(Inventory.getAllParts(), p -> true);
     FilteredList<Product> filteredProductsData = new FilteredList<>(Inventory.getAllProducts(), p -> true);
-
 
     @FXML
     private TableView<Part> tblViewPart;
@@ -83,16 +80,9 @@ public class MainWindow implements Initializable {
     @FXML
     public void OpenAddPartMenu(ActionEvent event) {
         try {
-            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            Object scene = FXMLLoader.load(getClass().getResource("../View_Controller/AddPart.fxml"));
-            stage.setTitle("Add Part");
-            stage.setScene(new Scene((Parent) scene));
-            stage.show();
+            switchWindow(event,"../View_Controller/AddPart.fxml", "Add Part" );
         } catch (Exception openAddPartMenu) {
-            Alert addPartMenu = new Alert(Alert.AlertType.NONE);
-            addPartMenu.setAlertType(Alert.AlertType.ERROR);
-            addPartMenu.setContentText("Unable to open the Add a Part Menu!");
-            addPartMenu.show();
+            alertMenu("Unable to open the Add a Part Menu!");
         }
     }
 
@@ -109,15 +99,9 @@ public class MainWindow implements Initializable {
     @FXML
     public void OpenAddProductMenu(ActionEvent event) {
         try {
-            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            scene = FXMLLoader.load(getClass().getResource("../View_Controller/AddProduct.fxml"));
-            stage.setScene(new Scene(scene));
-            stage.show();
+            switchWindow(event,"../View_Controller/AddProduct.fxml", "Add Product" );
         } catch (Exception openAddProductMenu) {
-            Alert AddProductMenu = new Alert(Alert.AlertType.NONE);
-            AddProductMenu.setAlertType(Alert.AlertType.ERROR);
-            AddProductMenu.setContentText("Unable to open the Add a Product Menu!");
-            AddProductMenu.show();
+            alertMenu("Unable to open the Add a Product Menu!");
         }
     }
 
@@ -134,28 +118,14 @@ public class MainWindow implements Initializable {
             //Selects Table View Row
             Part part = tblViewPart.getSelectionModel().getSelectedItem();
             if (part == null) {
-                Alert partSelection = new Alert(Alert.AlertType.NONE);
-                partSelection.setAlertType(Alert.AlertType.ERROR);
-                partSelection.setContentText("You must select a part in order to modify!");
-                partSelection.show();
+                alertMenu("You must select a part in order to modify!");
                 return;
             }
 
             //Opens Modify Menu
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("../View_Controller/ModifyPart.fxml"));
-            Parent ParentModifyPart = loader.load();
-            Scene SceneModifyPart = new Scene(ParentModifyPart);
-            ModifyPart PartController = loader.getController();
-            PartController.getPart(part);
-            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            stage.setScene(SceneModifyPart);
-            stage.show();
+            switchWindow(event,"../View_Controller/ModifyPart.fxml", "Modify Part" );
         } catch (Exception noSelectionModify) {
-            Alert noSelection = new Alert(Alert.AlertType.NONE);
-            noSelection.setAlertType(Alert.AlertType.ERROR);
-            noSelection.setContentText("You must select a part in order to modify!");
-            noSelection.show();
+            alertMenu("You must select a part in order to modify!");
         }
     }
 
@@ -164,9 +134,7 @@ public class MainWindow implements Initializable {
      * if the user selects cancel, the alert message will close and user is returned to Main Window.
      */
     public void ExitMenu() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setContentText("Are you sure you want to close program?");
-        Optional<ButtonType> result = alert.showAndWait();
+        Optional<ButtonType> result = alertMenu();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             System.exit(0);
         }
@@ -231,26 +199,21 @@ public class MainWindow implements Initializable {
             //Selects Table View Row
             Product product = tblViewProduct.getSelectionModel().getSelectedItem();
             if (product == null) {
-                Alert selectPartModify = new Alert(Alert.AlertType.NONE);
-                selectPartModify.setAlertType(Alert.AlertType.ERROR);
-                selectPartModify.setContentText("You must select a part in order to modify!");
-                selectPartModify.show();
+                alertMenu("You must select a part in order to modify!");
                 return;
             }
-            //Opens Modify Menu
+//Opens Modify Menu
             FXMLLoader Loader = new FXMLLoader(getClass().getResource("../View_Controller/ModifyProduct.fxml"));
             Loader.load();
-            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
             Parent scene = Loader.getRoot();
             stage.setScene(new Scene(scene));
             stage.show();
             ModifyProduct modifyProductController = Loader.getController();
             modifyProductController.selectedProduct(product.getId());
+
         } catch (Exception selectModifyPartError) {
-            Alert selectModifyPart = new Alert(Alert.AlertType.NONE);
-            selectModifyPart.setAlertType(Alert.AlertType.ERROR);
-            selectModifyPart.setContentText("You must select a part in order to modify!");
-            selectModifyPart.show();
+            alertMenu("You must select a part in order to modify!");
         }
     }
 
@@ -265,27 +228,17 @@ public class MainWindow implements Initializable {
     void onActionDeletePart() {
         Part part = tblViewPart.getSelectionModel().getSelectedItem();
         if (part == null) {
-            Alert selectPartAlert = new Alert(Alert.AlertType.ERROR);
-            selectPartAlert.setTitle("Error!");
-            selectPartAlert.setContentText("Please select a part.");
-            selectPartAlert.showAndWait();
+            alertDeletePartError("Please select a part.");
             return;
         }
 
         //Popup for Part Confirmation Delete
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirm");
-        alert.setHeaderText("Deleting is Permanent");
-        alert.setContentText("Are you sure you want to DELETE?");
-        Optional<ButtonType> result = alert.showAndWait();
+        Optional<ButtonType> result = alertConfirmDelete("Confirm");
         if (result.isPresent() && result.get() == ButtonType.OK) {
             System.out.println("Part " + part.getName() + " has been deleted!");
             deletePart(part.getId());
         } else {
-            Alert deletePartError = new Alert(Alert.AlertType.ERROR);
-            deletePartError.setTitle("Error!");
-            deletePartError.setContentText("Unable to delete Part!.");
-            deletePartError.showAndWait();
+            alertDeletePartError("Unable to delete Part!.");
         }
     }
 
@@ -298,25 +251,20 @@ public class MainWindow implements Initializable {
      * @param id Deletes the part by the id that is supplied in the onActionDeletePart.
      */
     public void deletePart(int id) {
-        for (Part Part : Inventory.getAllParts()) {
+        ObservableList<Part> allParts = Inventory.getAllParts();
+        for (Model.Part Part : allParts) {
             if (Part.getId() == id) {
                 Part selectedPart = tblViewPart.getSelectionModel().getSelectedItem();
                 if (selectedPart == null) {
-                    Alert deletePartAlert = new Alert(Alert.AlertType.NONE);
-                    deletePartAlert.setAlertType(Alert.AlertType.ERROR);
-                    deletePartAlert.setContentText("Error unable delete part because it doesn't exist");
-                    deletePartAlert.show();
-                } else {
-                    Inventory.getAllParts().remove(Part);
-                    Alert partDeleted = new Alert(Alert.AlertType.NONE);
-                    partDeleted.setAlertType(Alert.AlertType.INFORMATION);
-                    partDeleted.setContentText("Part " + Part.getName() + " has been deleted!");
-                    partDeleted.show();
+                    alertMenu("Error unable delete part because it doesn't exist");
                 }
+                alertPart(Part);
                 return;
             }
         }
     }
+
+
 
     /**
      * Delete the selected Product, if no part is selected an error message pops up alerting the user to select a Product
@@ -332,30 +280,18 @@ public class MainWindow implements Initializable {
         //Popup for Product Confirmation Delete
 
         if (product == null) {
-            Alert selectPartAlert = new Alert(Alert.AlertType.ERROR);
-            selectPartAlert.setTitle("Error!");
-            selectPartAlert.setContentText("Please select a part.");
-            selectPartAlert.showAndWait();
+            alertDeletePartError("Please select a part.");
             return;
         }
 
         //delete product;
         if (product.getAssociatedParts().size() > 0) {
-            Alert alertPartAss = new Alert(Alert.AlertType.INFORMATION);
-            alertPartAss.setContentText("There is a part Association, please remove the association");
-            alertPartAss.showAndWait();
-        } else {
-            Alert alertConfirmDelete = new Alert(Alert.AlertType.CONFIRMATION);
-            alertConfirmDelete.setTitle("CONFIRMATION");
-            alertConfirmDelete.setHeaderText("Deleting is Permanent");
-            alertConfirmDelete.setContentText("Are you sure you want to DELETE?");
-            Optional<ButtonType> result = alertConfirmDelete.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.OK) {
-                Alert partDeleted = new Alert(Alert.AlertType.NONE);
-                partDeleted.setAlertType(Alert.AlertType.INFORMATION);
-                partDeleted.setContentText("Part " + product.getName() + " has been deleted!");
-                partDeleted.show();
-            }
+            alertPartAss();
+        }
+        Optional<ButtonType> result = alertConfirmDelete("CONFIRMATION");
+
+        if (result.isPresent() && result.get().equals(ButtonType.OK)) {
+            alertDeleted(product.getName());
         }
     }
 
@@ -368,12 +304,7 @@ public class MainWindow implements Initializable {
      * @param id Deletes the Product by the id that is supplied in the onActionDeleteProduct.
      */
     public void deleteProduct(int id) {
-        for (Product Product : Inventory.getAllProducts()) {
-            if (Product.getId() == id) {
-                Inventory.getAllProducts().remove(Product);
-                return;
-            }
-        }
+        Inventory.getAllProducts().stream().filter(Product -> Product.getId() == id).findFirst().ifPresent(Product -> Inventory.getAllProducts().remove(Product));
     }
 
     /**
@@ -404,5 +335,58 @@ public class MainWindow implements Initializable {
         tblColProdCost.setCellValueFactory(new PropertyValueFactory<>("price"));
         tblColProdInvLvl.setCellValueFactory(new PropertyValueFactory<>("stock"));
     }
-}
 
+    private void alertPartAss() {
+        Alert alertPartAss = new Alert(Alert.AlertType.INFORMATION);
+        alertPartAss.setContentText("There is a part Association, please remove the association");
+        alertPartAss.showAndWait();
+    }
+
+    private void alertDeleted(String name) {
+        Alert partDeleted = new Alert(Alert.AlertType.NONE);
+        partDeleted.setAlertType(Alert.AlertType.INFORMATION);
+        partDeleted.setContentText("Part " + name + " has been deleted!");
+        partDeleted.show();
+    }
+
+    private Optional<ButtonType> alertConfirmDelete(String confirmation) {
+        Alert alertConfirmDelete = new Alert(Alert.AlertType.CONFIRMATION);
+        alertConfirmDelete.setTitle(confirmation);
+        alertConfirmDelete.setHeaderText("Deleting is Permanent");
+        alertConfirmDelete.setContentText("Are you sure you want to DELETE?");
+        return alertConfirmDelete.showAndWait();
+    }
+
+    private void alertPart(Part part) {
+        Inventory.getAllParts().remove(part);
+        alertDeleted(part.getName());
+    }
+
+    private void alertDeletePartError(String s) {
+        Alert deletePartError = new Alert(Alert.AlertType.ERROR);
+        deletePartError.setTitle("Error!");
+        deletePartError.setContentText(s);
+        deletePartError.showAndWait();
+    }
+
+    private void alertMenu(String s) {
+        Alert addPartMenu = new Alert(Alert.AlertType.NONE);
+        addPartMenu.setAlertType(Alert.AlertType.ERROR);
+        addPartMenu.setContentText(s);
+        addPartMenu.show();
+    }
+
+    private void switchWindow(ActionEvent event, String s, String t) throws java.io.IOException {
+        Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        Object scene = FXMLLoader.load(getClass().getResource(s));
+        stage.setTitle(t);
+        stage.setScene(new Scene((Parent) scene));
+        stage.show();
+    }
+
+    private Optional<ButtonType> alertMenu() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setContentText("Are you sure you want to close program?");
+        return alert.showAndWait();
+    }
+}

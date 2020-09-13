@@ -140,10 +140,7 @@ public class AddProduct implements Initializable {
                 addedParts.remove(selectedPart);
                 System.out.println("Removed association!");
             }
-            Alert errorDelete = new Alert(Alert.AlertType.ERROR);
-            errorDelete.setTitle("Error!");
-            errorDelete.setContentText("There is no part association.");
-            errorDelete.showAndWait();
+            alertMessage("There is no part association.");
         }
     }
 
@@ -174,27 +171,17 @@ public class AddProduct implements Initializable {
 
             //Error if Inv is Less then Zero
             if (stock < 0) {
-                Alert minGreaterMax = new Alert(Alert.AlertType.ERROR);
-                minGreaterMax.setTitle("Error!");
-                minGreaterMax.setContentText("Inventory needs to be greater than 0.");
-                minGreaterMax.showAndWait();
-                return;
+                alertMessage("Inventory needs to be greater than 0.");
             }
 
             //Error if Min is Greater then Max field
             if (min > max) {
-                Alert minGreaterMax = new Alert(Alert.AlertType.ERROR);
-                minGreaterMax.setTitle("Error!");
-                minGreaterMax.setContentText("Quantity Min needs to be smaller than Max");
-                minGreaterMax.showAndWait();
+                alertMessage("Quantity Min needs to be smaller than Max");
                 return;
             }
             //Error if Inventory is Greater then Max Field
             if (stock > max) {
-                Alert invGreaterMax = new Alert(Alert.AlertType.ERROR);
-                invGreaterMax.setTitle("Error!");
-                invGreaterMax.setContentText("Inventory needs to be smaller than Max");
-                invGreaterMax.showAndWait();
+                alertMessage("Inventory needs to be smaller than Max");
                 return;
             }
 
